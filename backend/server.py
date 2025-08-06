@@ -31,6 +31,14 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Create Socket.IO server
+sio = socketio.AsyncServer(
+    async_mode='asgi',
+    cors_allowed_origins="*",
+    logger=True,
+    engineio_logger=True
+)
+
 # JWT settings
 JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'default-secret-key')
 JWT_ALGORITHM = "HS256"
