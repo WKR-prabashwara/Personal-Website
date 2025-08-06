@@ -1,47 +1,230 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { gsap } from 'gsap';
 
 const Preloader = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
+  const [loadingText, setLoadingText] = useState('Initializing...');
+  const preloaderRef = useRef(null);
+  const blackHoleRef = useRef(null);
+  const progressBarRef = useRef(null);
+  const textRef = useRef(null);
+  const orbitRingsRef = useRef([]);
+
+  const loadingStages = [
+    { progress: 20, text: 'Loading Universe...' },
+    { progress: 40, text: 'Mapping Stars...' },
+    { progress: 60, text: 'Calculating Orbits...' },
+    { progress: 80, text: 'Synchronizing Time...' },
+    { progress: 100, text: 'Welcome!' }
+  ];
 
   useEffect(() => {
+    // GSAP animations for entrance
+    const tl = gsap.timeline();
+    
+    tl.from(blackHoleRef.current, {
+      scale: 0,
+      rotation: 0,
+      duration: 1,
+      ease: "back.out(1.7)"
+    })
+    .from(textRef.current, {
+      y: 50,
+      opacity: 0,
+      duration: 0.8
+    }, "-=0.5")
+    .from(progressBarRef.current, {
+      scaleX: 0,
+      duration: 0.6
+    }, "-=0.3");
+
+    // Animate orbit rings
+    orbitRingsRef.current.forEach((ring, index) => {
+      if (ring) {
+        gsap.set(ring, { rotation: Math.random() * 360 });
+        gsap.to(ring, {
+          rotation: "+=360",
+          duration: 3 + index * 0.5,
+          ease: "none",
+          repeat: -1
+        });
+      }
+    });
+
+    // Pulsing black hole center
+    gsap.to(blackHoleRef.current?.children[3], {
+      scale: 1.1,
+      duration: 2,
+      ease: "power2.inOut",
+      repeat: -1,
+      yoyo: true
+    });
+
+  }, []);
+
+  useEffect(() => {
+    let currentStage = 0;
+    
     const interval = setInterval(() => {
       setProgress(prev => {
-        if (prev >= 100) {
+        const newProgress = prev + 1;
+        
+        // Update loading text based on progress
+        if (currentStage < loadingStages.length) {
+          const stage = loadingStages[currentStage];
+          if (newProgress >= stage.progress) {
+            setLoadingText(stage.text);
+            
+            // Animate text change
+            gsap.fromTo(textRef.current, {
+              y: 10,
+              opacity: 0.7
+            }, {
+              y: 0,
+              opacity: 1,
+              duration: 0.5,
+              ease: "power2.out"
+            });
+            
+            currentStage++;
+          }
+        }
+        
+        // Animate progress bar
+        gsap.to(progressBarRef.current, {
+          width: `${newProgress}%`,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+
+        if (newProgress >= 100) {
           clearInterval(interval);
-          setTimeout(() => {
-            if (onComplete) onComplete();
-          }, 500);
+          
+          // Exit animations
+          const exitTl = gsap.timeline({
+            onComplete: () => {
+              if (onComplete) onComplete();
+            }
+          });
+          
+          exitTl.to(blackHoleRef.current, {
+            scale: 1.2,
+            rotation: "+=180",
+            duration: 0.8,
+            ease: "power2.inOut"
+          })
+          .to(preloaderRef.current, {
+            opacity: 0,
+            scale: 1.1,
+            duration: 0.6,
+            ease: "power2.inOut"
+          }, "-=0.3");
+          
           return 100;
         }
-        return prev + 1;
+        
+        return newProgress;
       });
-    }, 30);
+    }, 40);
 
     return () => clearInterval(interval);
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-background flex items-center justify-center">
-      <div className="text-center">
-        {/* Spinning black hole loader */}
-        <div className="relative w-24 h-24 mx-auto mb-8">
-          <div className="absolute inset-0 rounded-full border-4 border-primary/20"></div>
-          <div className="absolute inset-2 rounded-full border-2 border-primary/40 animate-spin"></div>
-          <div className="absolute inset-4 rounded-full border border-primary animate-spin" style={{ animationDuration: '0.5s' }}></div>
-          <div className="absolute inset-6 rounded-full bg-black"></div>
-        </div>
-        
-        <h2 className="text-2xl font-bold text-foreground mb-4">Loading Universe...</h2>
-        
-        {/* Progress bar */}
-        <div className="w-64 h-2 bg-secondary rounded-full mx-auto mb-4">
+    <div 
+      ref={preloaderRef}
+      className="fixed inset-0 z-[9999] bg-background flex items-center justify-center overflow-hidden"
+    >
+      {/* Animated background particles */}
+      <div className="absolute inset-0">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-primary/30 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 2}s`
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="text-center z-10">
+        {/* Enhanced Black Hole Loader */}
+        <div ref={blackHoleRef} className="relative w-32 h-32 mx-auto mb-12">
+          {/* Outer orbit rings */}
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              ref={el => orbitRingsRef.current[i] = el}
+              className="absolute inset-0 rounded-full border border-primary/20"
+              style={{
+                transform: `scale(${1 + i * 0.15})`,
+                borderWidth: `${2 - i * 0.3}px`
+              }}
+            />
+          ))}
+          
+          {/* Middle rotating ring with particles */}
+          <div className="absolute inset-4 rounded-full border-2 border-primary/60 animate-spin">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-2 h-2 bg-primary rounded-full"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  transform: `rotate(${i * 45}deg) translate(16px, 0px) translate(-50%, -50%)`
+                }}
+              />
+            ))}
+          </div>
+          
+          {/* Inner spinning ring */}
           <div 
-            className="h-full bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-100"
-            style={{ width: `${progress}%` }}
-          ></div>
+            className="absolute inset-6 rounded-full border-2 border-primary animate-spin"
+            style={{ animationDuration: '0.8s' }}
+          />
+          
+          {/* Black hole center with glow */}
+          <div className="absolute inset-8 rounded-full bg-gradient-radial from-primary/80 via-primary/40 to-black shadow-[0_0_30px_rgba(147,51,234,0.6)]" />
+          <div className="absolute inset-10 rounded-full bg-black shadow-inner" />
         </div>
         
-        <p className="text-muted-foreground">{progress}%</p>
+        {/* Loading Text */}
+        <h2 ref={textRef} className="text-3xl font-bold text-foreground mb-6 tracking-wider">
+          {loadingText}
+        </h2>
+        
+        {/* Enhanced Progress Bar */}
+        <div className="w-80 h-3 bg-secondary/50 rounded-full mx-auto mb-6 overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent animate-pulse" />
+          <div 
+            ref={progressBarRef}
+            className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 rounded-full transition-all duration-300 relative overflow-hidden"
+            style={{ width: '0%' }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
+          </div>
+        </div>
+        
+        {/* Progress Percentage */}
+        <p className="text-muted-foreground text-lg font-medium">
+          {progress}%
+        </p>
+        
+        {/* Loading dots animation */}
+        <div className="mt-4 flex justify-center space-x-2">
+          {[...Array(3)].map((_, i) => (
+            <div
+              key={i}
+              className="w-2 h-2 bg-primary rounded-full animate-bounce"
+              style={{ animationDelay: `${i * 0.2}s` }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
