@@ -104,8 +104,8 @@ const TimelineSection = () => {
           {/* Central Timeline Line - Hidden on mobile, visible on md+ */}
           <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gray-400/60"></div>
           
-          {/* Mobile Timeline Line - Left side */}
-          <div className="md:hidden absolute left-8 top-0 bottom-0 w-0.5 bg-gray-400/60"></div>
+          {/* Mobile Timeline Line - Better positioning */}
+          <div className="md:hidden absolute left-6 top-0 bottom-0 w-0.5 bg-gray-400/60"></div>
 
           <div className="space-y-12">
             {visibleEvents.map((event, index) => (
