@@ -14,7 +14,7 @@ import Footer from "./components/Footer";
 import MusicPlayer from "./components/MusicPlayer";
 
 function App() {
-  const [loading, setLoading] = useState(true); // Enable preloader
+  const [loading, setLoading] = useState(false); // Enable preloader
 
   const handlePreloaderComplete = () => {
     setLoading(false);
