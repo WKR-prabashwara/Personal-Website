@@ -176,13 +176,14 @@ const Navigation = () => {
     >
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo - Make responsive and clickable to home */}
           <div 
             ref={logoRef}
-            className="text-foreground text-xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
+            className="text-foreground text-xl md:text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
             onClick={() => scrollToSection('home')}
           >
-            Prabashwara.
+            <span className="block sm:hidden">P.</span>
+            <span className="hidden sm:block">Prabashwara.</span>
           </div>
           
           {/* Desktop Navigation - Centered nav links */}
