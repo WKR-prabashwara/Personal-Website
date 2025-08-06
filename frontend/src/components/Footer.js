@@ -108,7 +108,7 @@ const Footer = () => {
         <div className="pt-8 border-t border-border">
           <div className="text-center">
             <p className="text-muted-foreground text-sm">
-              © Copyright 2024. All right reserved | Built with ❤️ using React & FastAPI
+              © Copyright {new Date().getFullYear()}. All rights reserved | Built with ❤️ using React & FastAPI
             </p>
           </div>
         </div>
