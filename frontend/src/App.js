@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./App.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Preloader from "./components/Preloader";
@@ -14,6 +14,19 @@ import ContactSection from "./components/ContactSection";
 import Footer from "./components/Footer";
 import MusicPlayer from "./components/MusicPlayer";
 import AdminApp from "./components/AdminApp";
+import analyticsService from "./services/analyticsService";
+
+// Analytics tracking wrapper component
+const AnalyticsWrapper = ({ children }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Track page views
+    analyticsService.trackPageView(location.pathname, document.title);
+  }, [location]);
+
+  return children;
+};
 
 // Main Portfolio Component
 const Portfolio = () => {
@@ -21,6 +34,8 @@ const Portfolio = () => {
 
   const handlePreloaderComplete = () => {
     setLoading(false);
+    // Track initial page load completion
+    analyticsService.trackEvent('Performance', 'preloader_complete', 'initial_load');
   };
 
   return (
@@ -48,11 +63,13 @@ function App() {
   return (
     <ThemeProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<Portfolio />} />
-          <Route path="/admin" element={<AdminApp />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <AnalyticsWrapper>
+          <Routes>
+            <Route path="/" element={<Portfolio />} />
+            <Route path="/admin" element={<AdminApp />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AnalyticsWrapper>
       </Router>
     </ThemeProvider>
   );
