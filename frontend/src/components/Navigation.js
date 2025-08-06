@@ -69,7 +69,7 @@ const Navigation = () => {
     <>
       {/* Desktop Navigation - Dock Style */}
       <nav className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-white/90 backdrop-blur-lg rounded-full px-8 py-3 shadow-lg border border-white/20">
+        <div className="bg-black/80 backdrop-blur-lg rounded-full px-8 py-3 shadow-lg border border-purple-500/30">
           <div className="flex items-center space-x-2">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -81,8 +81,8 @@ const Navigation = () => {
                   onClick={() => scrollToSection(item.id)}
                   className={`relative flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 text-sm font-medium ${
                     isActive 
-                      ? 'bg-green-500 text-white shadow-md' 
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-md' 
+                      : 'text-gray-300 hover:text-white hover:bg-white/10'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -94,31 +94,33 @@ const Navigation = () => {
         </div>
       </nav>
 
-      {/* Desktop Logo and Subscribe */}
+      {/* Desktop Logo and Subscribe with Blur Effect */}
       <div className="hidden md:block fixed top-0 left-0 right-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          {/* Logo */}
-          <div 
-            className="text-foreground text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
-            onClick={() => scrollToSection('home')}
-          >
-            Prabashwara.
+        <div className="bg-black/60 backdrop-blur-md border-b border-purple-500/20 transition-all duration-300">
+          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            {/* Logo */}
+            <div 
+              className="text-white text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
+              onClick={() => scrollToSection('home')}
+            >
+              Prabashwara.
+            </div>
+            
+            {/* Subscribe button */}
+            <button 
+              onClick={scrollToNewsletter}
+              className="relative bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-6 py-2 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black overflow-hidden group hover:scale-105"
+            >
+              <span className="relative z-10">Subscribe</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-700 to-cyan-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
           </div>
-          
-          {/* Subscribe button */}
-          <button 
-            onClick={scrollToNewsletter}
-            className="relative bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background overflow-hidden group hover:scale-105"
-          >
-            <span className="relative z-10">Subscribe</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </button>
         </div>
       </div>
 
       {/* Mobile Navigation - Icon Dock */}
       <nav className="md:hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-white/90 backdrop-blur-lg rounded-full px-6 py-3 shadow-lg border border-white/20">
+        <div className="bg-black/80 backdrop-blur-lg rounded-full px-6 py-3 shadow-lg border border-purple-500/30">
           <div className="flex items-center space-x-1">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -130,8 +132,8 @@ const Navigation = () => {
                   onClick={() => scrollToSection(item.id)}
                   className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${
                     isActive 
-                      ? 'bg-green-500 text-white shadow-md' 
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-md' 
+                      : 'text-gray-300 hover:text-white hover:bg-white/10'
                   }`}
                   title={item.label}
                 >
