@@ -59,7 +59,7 @@ const AboutSection = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="grid lg:grid-cols-2 gap-12 items-center"
+          className="grid gap-8 lg:gap-12 lg:grid-cols-2 items-center"
         >
           {/* Profile Section */}
           <motion.div 
@@ -67,11 +67,11 @@ const AboutSection = () => {
             className="flex flex-col items-center lg:items-start"
           >
             {/* Profile Photo Card */}
-            <div className="w-80 h-80 bg-card border border-border rounded-2xl mb-8 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="w-64 h-64 sm:w-80 sm:h-80 bg-card border border-border rounded-2xl mb-6 sm:mb-8 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="w-full h-full bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/20 dark:to-blue-900/20 flex items-center justify-center relative">
                 {/* Placeholder for actual photo */}
-                <div className="w-64 h-64 bg-muted rounded-full flex items-center justify-center border-4 border-background shadow-inner">
-                  <User className="w-32 h-32 text-muted-foreground/50" />
+                <div className="w-48 h-48 sm:w-64 sm:h-64 bg-muted rounded-full flex items-center justify-center border-4 border-background shadow-inner">
+                  <User className="w-24 h-24 sm:w-32 sm:h-32 text-muted-foreground/50" />
                 </div>
                 
                 {/* Photo overlay effects */}
@@ -79,22 +79,22 @@ const AboutSection = () => {
               </div>
             </div>
             
-            <div className="text-center lg:text-left">
-              <h3 className="text-2xl font-semibold text-foreground mb-4">
+            <div className="text-center lg:text-left px-4 lg:px-0">
+              <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4">
                 Mathematics Student
               </h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">
+              <p className="text-muted-foreground leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
                 I study advanced mathematics, physics, chemistry, programming, networking, 
                 and cryptography-like subjects. I appreciate both because encountering new ideas
                 and concepts helps me learn, change, and learn something new every day.
               </p>
-              <p className="text-muted-foreground leading-relaxed mb-8">
+              <p className="text-muted-foreground leading-relaxed mb-6 sm:mb-8 text-sm sm:text-base">
                 For me, becoming a better version of myself means constantly working and improving.
               </p>
               
               <button 
                 onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
-                className="bg-primary text-primary-foreground px-8 py-3 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105"
+                className="bg-primary text-primary-foreground px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base"
               >
                 Contact me
               </button>
@@ -104,56 +104,56 @@ const AboutSection = () => {
           {/* Skills and Interests */}
           <motion.div 
             variants={slideInFromRight(0.5)}
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8"
           >
-            <div className="bg-card border border-border rounded-2xl p-6">
-              <div className="flex items-center mb-4">
-                <Calculator className="w-6 h-6 text-primary mr-3" />
-                <h4 className="text-xl font-semibold text-foreground">Academic Focus</h4>
+            <div className="bg-card border border-border rounded-2xl p-4 sm:p-6">
+              <div className="flex items-center mb-3 sm:mb-4">
+                <Calculator className="w-5 h-5 sm:w-6 sm:h-6 text-primary mr-3" />
+                <h4 className="text-lg sm:text-xl font-semibold text-foreground">Academic Focus</h4>
               </div>
-              <ul className="space-y-3 text-muted-foreground">
+              <ul className="space-y-2 sm:space-y-3 text-muted-foreground">
                 <li className="flex items-center">
-                  <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                  Mathematics (Pure & Applied)
+                  <span className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></span>
+                  <span className="text-sm sm:text-base">Mathematics (Pure & Applied)</span>
                 </li>
                 <li className="flex items-center">
-                  <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                  Physics & Chemistry
+                  <span className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></span>
+                  <span className="text-sm sm:text-base">Physics & Chemistry</span>
                 </li>
                 <li className="flex items-center">
-                  <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                  Advanced Level Sciences
+                  <span className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></span>
+                  <span className="text-sm sm:text-base">Advanced Level Sciences</span>
                 </li>
               </ul>
             </div>
             
-            <div className="bg-card border border-border rounded-2xl p-6">
-              <div className="flex items-center mb-4">
-                <Code className="w-6 h-6 text-primary mr-3" />
-                <h4 className="text-xl font-semibold text-foreground">Technical Skills</h4>
+            <div className="bg-card border border-border rounded-2xl p-4 sm:p-6">
+              <div className="flex items-center mb-3 sm:mb-4">
+                <Code className="w-5 h-5 sm:w-6 sm:h-6 text-primary mr-3" />
+                <h4 className="text-lg sm:text-xl font-semibold text-foreground">Technical Skills</h4>
               </div>
-              <ul className="space-y-3 text-muted-foreground">
+              <ul className="space-y-2 sm:space-y-3 text-muted-foreground">
                 <li className="flex items-center">
-                  <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                  Programming & Development
+                  <span className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></span>
+                  <span className="text-sm sm:text-base">Programming & Development</span>
                 </li>
                 <li className="flex items-center">
-                  <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                  Networking & Systems
+                  <span className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></span>
+                  <span className="text-sm sm:text-base">Networking & Systems</span>
                 </li>
                 <li className="flex items-center">
-                  <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                  Cryptography & Security
+                  <span className="w-2 h-2 bg-primary rounded-full mr-3 flex-shrink-0"></span>
+                  <span className="text-sm sm:text-base">Cryptography & Security</span>
                 </li>
               </ul>
             </div>
             
-            <div className="bg-card border border-border rounded-2xl p-6">
-              <div className="flex items-center mb-4">
-                <BookOpen className="w-6 h-6 text-primary mr-3" />
-                <h4 className="text-xl font-semibold text-foreground">Philosophy</h4>
+            <div className="bg-card border border-border rounded-2xl p-4 sm:p-6">
+              <div className="flex items-center mb-3 sm:mb-4">
+                <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-primary mr-3" />
+                <h4 className="text-lg sm:text-xl font-semibold text-foreground">Philosophy</h4>
               </div>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm sm:text-base">
                 I believe in continuous learning and improvement. Every day brings new opportunities 
                 to discover, understand, and grow both intellectually and personally.
               </p>
