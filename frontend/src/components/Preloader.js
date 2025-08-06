@@ -1,14 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { gsap } from 'gsap';
 
 const Preloader = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [loadingText, setLoadingText] = useState('Initializing...');
-  const preloaderRef = useRef(null);
-  const blackHoleRef = useRef(null);
-  const progressBarRef = useRef(null);
-  const textRef = useRef(null);
-  const orbitRingsRef = useRef([]);
+  const [isExiting, setIsExiting] = useState(false);
 
   const loadingStages = [
     { progress: 20, text: 'Loading Universe...' },
@@ -19,55 +14,11 @@ const Preloader = ({ onComplete }) => {
   ];
 
   useEffect(() => {
-    // GSAP animations for entrance
-    const tl = gsap.timeline();
-    
-    tl.from(blackHoleRef.current, {
-      scale: 0,
-      rotation: 0,
-      duration: 1,
-      ease: "back.out(1.7)"
-    })
-    .from(textRef.current, {
-      y: 50,
-      opacity: 0,
-      duration: 0.8
-    }, "-=0.5")
-    .from(progressBarRef.current, {
-      scaleX: 0,
-      duration: 0.6
-    }, "-=0.3");
-
-    // Animate orbit rings
-    orbitRingsRef.current.forEach((ring, index) => {
-      if (ring) {
-        gsap.set(ring, { rotation: Math.random() * 360 });
-        gsap.to(ring, {
-          rotation: "+=360",
-          duration: 3 + index * 0.5,
-          ease: "none",
-          repeat: -1
-        });
-      }
-    });
-
-    // Pulsing black hole center
-    gsap.to(blackHoleRef.current?.children[3], {
-      scale: 1.1,
-      duration: 2,
-      ease: "power2.inOut",
-      repeat: -1,
-      yoyo: true
-    });
-
-  }, []);
-
-  useEffect(() => {
     let currentStage = 0;
     let progressValue = 0;
     
     const interval = setInterval(() => {
-      progressValue += Math.random() * 3 + 1; // Random increment for more natural loading
+      progressValue += Math.random() * 3 + 1;
       
       if (progressValue > 100) progressValue = 100;
       
@@ -78,73 +29,33 @@ const Preloader = ({ onComplete }) => {
         const stage = loadingStages[currentStage];
         if (progressValue >= stage.progress) {
           setLoadingText(stage.text);
-          
-          // Animate text change
-          if (textRef.current) {
-            gsap.fromTo(textRef.current, {
-              y: 10,
-              opacity: 0.7
-            }, {
-              y: 0,
-              opacity: 1,
-              duration: 0.5,
-              ease: "power2.out"
-            });
-          }
-          
           currentStage++;
         }
-      }
-      
-      // Animate progress bar
-      if (progressBarRef.current) {
-        gsap.to(progressBarRef.current, {
-          width: `${progressValue}%`,
-          duration: 0.3,
-          ease: "power2.out"
-        });
       }
 
       if (progressValue >= 100) {
         clearInterval(interval);
         
-        // Short delay before exit
+        // Start exit animation
         setTimeout(() => {
-          // Exit animations
-          const exitTl = gsap.timeline({
-            onComplete: () => {
-              if (onComplete) onComplete();
-            }
-          });
+          setIsExiting(true);
           
-          if (blackHoleRef.current && preloaderRef.current) {
-            exitTl.to(blackHoleRef.current, {
-              scale: 1.2,
-              rotation: "+=180",
-              duration: 0.8,
-              ease: "power2.inOut"
-            })
-            .to(preloaderRef.current, {
-              opacity: 0,
-              scale: 1.1,
-              duration: 0.6,
-              ease: "power2.inOut"
-            }, "-=0.3");
-          } else {
-            // Fallback if refs are null
+          // Complete after animation
+          setTimeout(() => {
             if (onComplete) onComplete();
-          }
+          }, 600);
         }, 500);
       }
-    }, 50); // Slightly slower interval
+    }, 50);
 
     return () => clearInterval(interval);
   }, [onComplete]);
 
   return (
     <div 
-      ref={preloaderRef}
-      className="fixed inset-0 z-[9999] bg-background flex items-center justify-center overflow-hidden"
+      className={`fixed inset-0 z-[9999] bg-background flex items-center justify-center overflow-hidden transition-all duration-600 ${
+        isExiting ? 'opacity-0 scale-110' : 'opacity-100 scale-100'
+      }`}
     >
       {/* Animated background particles */}
       <div className="absolute inset-0">
@@ -164,16 +75,17 @@ const Preloader = ({ onComplete }) => {
 
       <div className="text-center z-10">
         {/* Enhanced Black Hole Loader */}
-        <div ref={blackHoleRef} className="relative w-32 h-32 mx-auto mb-12">
+        <div className={`relative w-32 h-32 mx-auto mb-12 transition-all duration-800 ${isExiting ? 'scale-120 rotate-180' : ''}`}>
           {/* Outer orbit rings */}
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              ref={el => orbitRingsRef.current[i] = el}
-              className="absolute inset-0 rounded-full border border-primary/20"
+              className="absolute inset-0 rounded-full border border-primary/20 animate-spin"
               style={{
                 transform: `scale(${1 + i * 0.15})`,
-                borderWidth: `${2 - i * 0.3}px`
+                borderWidth: `${2 - i * 0.3}px`,
+                animationDuration: `${3 + i * 0.5}s`,
+                animationDirection: i % 2 === 0 ? 'normal' : 'reverse'
               }}
             />
           ))}
@@ -200,12 +112,12 @@ const Preloader = ({ onComplete }) => {
           />
           
           {/* Black hole center with glow */}
-          <div className="absolute inset-8 rounded-full bg-gradient-radial from-primary/80 via-primary/40 to-black shadow-[0_0_30px_rgba(147,51,234,0.6)]" />
+          <div className="absolute inset-8 rounded-full bg-gradient-radial from-primary/80 via-primary/40 to-black shadow-[0_0_30px_rgba(147,51,234,0.6)] animate-pulse" />
           <div className="absolute inset-10 rounded-full bg-black shadow-inner" />
         </div>
         
         {/* Loading Text */}
-        <h2 ref={textRef} className="text-3xl font-bold text-foreground mb-6 tracking-wider">
+        <h2 className="text-3xl font-bold text-foreground mb-6 tracking-wider transition-all duration-500">
           {loadingText}
         </h2>
         
@@ -213,9 +125,8 @@ const Preloader = ({ onComplete }) => {
         <div className="w-80 h-3 bg-secondary/50 rounded-full mx-auto mb-6 overflow-hidden relative">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent animate-pulse" />
           <div 
-            ref={progressBarRef}
             className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 rounded-full transition-all duration-300 relative overflow-hidden"
-            style={{ width: '0%' }}
+            style={{ width: `${progress}%` }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
           </div>
@@ -223,7 +134,7 @@ const Preloader = ({ onComplete }) => {
         
         {/* Progress Percentage */}
         <p className="text-muted-foreground text-lg font-medium">
-          {progress}%
+          {Math.round(progress)}%
         </p>
         
         {/* Loading dots animation */}
