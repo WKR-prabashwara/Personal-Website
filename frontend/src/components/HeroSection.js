@@ -80,9 +80,12 @@ const HeroSection = () => {
         {/* Welcome Badge - Add proper icon */}
         <motion.div
           variants={slideInFromTop}
-          className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20"
+          className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/40"
+          style={{
+            textShadow: '0 2px 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(147, 51, 234, 0.3)'
+          }}
         >
-          <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-2">
+          <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-2 font-semibold">
             <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1L13.5 2.5L16.17 5.33L10.5 11L15 15.5L20.67 9.83L23.5 12.5L22 14H22L21 13V15L15 21L9 15V9L15 3V1L9 7V9L15 15L21 9Z"/>
             </svg>
@@ -94,10 +97,17 @@ const HeroSection = () => {
         <motion.div
           variants={slideInFromLeft(0.5)}
           className="text-center mb-6"
+          style={{
+            textShadow: '0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.7)'
+          }}
         >
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 tracking-wider">
-            <span className="text-white">Rivibibu</span>{' '}
-            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            <span className="text-white" style={{
+              textShadow: '0 4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.7), 2px 2px 4px rgba(0, 0, 0, 0.8)'
+            }}>Rivibibu</span>{' '}
+            <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent" style={{
+              textShadow: '0 4px 20px rgba(147, 51, 234, 0.8), 0 0 30px rgba(147, 51, 234, 0.5)'
+            }}>
               Prabashwara.
             </span>
           </h1>
@@ -106,7 +116,14 @@ const HeroSection = () => {
         {/* Subtitle */}
         <motion.p
           variants={slideInFromLeft(0.8)}
-          className="text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed text-center mb-8"
+          className="text-lg md:text-xl lg:text-2xl text-gray-100 max-w-3xl mx-auto leading-relaxed text-center mb-8 font-medium"
+          style={{
+            textShadow: '0 2px 15px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 0, 0, 0.7), 1px 1px 3px rgba(0, 0, 0, 0.8)',
+            background: 'rgba(0, 0, 0, 0.2)',
+            padding: '1rem 2rem',
+            borderRadius: '1rem',
+            backdropFilter: 'blur(10px)'
+          }}
         >
           Exploring the cosmos through science, mathematics, and imagination
         </motion.p>
