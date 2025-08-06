@@ -46,8 +46,11 @@ const ContactSection = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <div className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20 inline-block">
-            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              ✨ Mathematics Student Portfolio
+            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-2">
+              <div className="w-4 h-4 bg-gradient-to-r from-purple-400 to-cyan-400 rounded-sm flex items-center justify-center">
+                <Mail className="w-3 h-3 text-white" />
+              </div>
+              Mathematics Student Portfolio
             </span>
           </div>
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
