@@ -160,7 +160,10 @@ const TimelineSection = () => {
                       </div>
                       
                       {/* Action Button */}
-                      <button className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors group text-sm">
+                      <button 
+                        onClick={() => alert("Timeline Details - More information coming soon!")}
+                        className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors group text-sm"
+                      >
                         <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         View Details
                       </button>
