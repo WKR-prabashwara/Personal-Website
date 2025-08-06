@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Send } from 'lucide-react';
+import { Mail, Send, Github, Linkedin, Twitter } from 'lucide-react';
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -163,16 +163,34 @@ const ContactSection = () => {
                 </div>
                 
                 <div className="mt-6">
-                  <p className="text-sm text-gray-400 mb-4">These are clickable</p>
+                  <p className="text-sm text-gray-400 mb-4">Connect with me on social platforms</p>
                   <div className="flex gap-3">
-                    <a href="#" className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
-                      <span className="text-white font-semibold text-sm">G</span>
+                    <a 
+                      href="https://github.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 group"
+                      title="GitHub"
+                    >
+                      <Github className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
                     </a>
-                    <a href="#" className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
-                      <span className="text-white font-semibold text-sm">L</span>
+                    <a 
+                      href="https://linkedin.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 group"
+                      title="LinkedIn"
+                    >
+                      <Linkedin className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
                     </a>
-                    <a href="#" className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors">
-                      <span className="text-white font-semibold text-sm">T</span>
+                    <a 
+                      href="https://twitter.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 group"
+                      title="X (Twitter)"
+                    >
+                      <Twitter className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
                     </a>
                   </div>
                 </div>

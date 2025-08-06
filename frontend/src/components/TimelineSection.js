@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { ChevronDown, Calendar, ExternalLink } from 'lucide-react';
+import { ChevronDown, Calendar, ExternalLink, MapPin } from 'lucide-react';
 
 const TimelineSection = () => {
   const [showMore, setShowMore] = useState(false);
 
-  // Mock timeline data
+  // Mock timeline data with locations
   const timelineEvents = [
     {
       id: 1,
       year: "2010",
       title: "Started Primary Education",
       description: "Began formal education with focus on basic mathematics and sciences.",
-      // image: "/api/placeholder/300/200",
+      location: "Colombo, Sri Lanka",
       tags: ["Education", "Foundation"],
       dateRange: "2010 - 2015"
     },
@@ -20,7 +20,7 @@ const TimelineSection = () => {
       year: "2012", 
       title: "Mathematics Excellence",
       description: "Achieved outstanding results in mathematics competitions at school level.",
-      // image: "/api/placeholder/300/200", 
+      location: "Royal College, Colombo",
       tags: ["Achievement", "Mathematics"],
       dateRange: "2012"
     },
@@ -29,7 +29,7 @@ const TimelineSection = () => {
       year: "2013",
       title: "Science Stream Selection", 
       description: "Chose science stream focusing on mathematics, physics, and chemistry.",
-      // image: "/api/placeholder/300/200",
+      location: "Colombo, Sri Lanka",
       tags: ["Education", "Career Path"], 
       dateRange: "2013"
     },
@@ -38,7 +38,7 @@ const TimelineSection = () => {
       year: "2016",
       title: "Advanced Level Entry",
       description: "Successfully entered Advanced Level studies with focus on mathematics and sciences.",
-      // image: "/api/placeholder/300/200",
+      location: "University of Colombo",
       tags: ["Education", "Milestone"],
       dateRange: "2016 - Present"
     },
@@ -47,7 +47,7 @@ const TimelineSection = () => {
       year: "2017", 
       title: "Programming Discovery",
       description: "Discovered programming and computational mathematics. Started learning Python.",
-      // image: "/api/placeholder/300/200",
+      location: "Colombo, Sri Lanka",
       tags: ["Technology", "Skill Development"],
       dateRange: "2017"
     },
@@ -56,7 +56,7 @@ const TimelineSection = () => {
       year: "2018",
       title: "Research Interests", 
       description: "Developed interests in cryptography, advanced mathematics, and theoretical physics.",
-      // image: "/api/placeholder/300/200",
+      location: "University Research Lab",
       tags: ["Research", "Specialization"], 
       dateRange: "2018"
     }
@@ -101,8 +101,8 @@ const TimelineSection = () => {
 
         {/* Timeline with Central Axis */}
         <div className="relative">
-          {/* Central Timeline Line - Made skinnier and theme-colored */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500/60 via-cyan-500/60 to-purple-500/60"></div>
+          {/* Central Timeline Line - Gray colored and thinner */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gray-400/60"></div>
 
           <div className="space-y-12">
             {visibleEvents.map((event, index) => (
@@ -112,24 +112,13 @@ const TimelineSection = () => {
                   index % 2 === 0 ? 'justify-start' : 'justify-end'
                 }`}
               >
-                {/* Year Circle on Timeline */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 bg-primary rounded-full border-4 border-background flex items-center justify-center text-primary-foreground font-bold text-sm z-10">
-                  {event.year}
+                {/* Small dot circle on timeline - smaller and no year text */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-2 border-background flex items-center justify-center z-10">
                 </div>
 
                 {/* Timeline Card */}
                 <div className={`w-5/12 ${index % 2 === 0 ? 'mr-auto pr-8' : 'ml-auto pl-8'}`}>
                   <div className="bg-card border border-border rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    {/* Card Image
-                    <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/20 dark:to-blue-900/20 flex items-center justify-center">
-                      <div className="text-4xl opacity-30">
-                        {event.tags.includes('Education') ? '📚' : 
-                         event.tags.includes('Achievement') ? '🏆' :
-                         event.tags.includes('Technology') ? '💻' :
-                         event.tags.includes('Research') ? '🔬' : '📅'}
-                      </div>
-                    </div> */}
-
                     {/* Card Content */}
                     <div className="p-6">
                       <div className="flex items-center gap-2 mb-3">
@@ -144,6 +133,12 @@ const TimelineSection = () => {
                       <p className="text-muted-foreground leading-relaxed mb-4 text-sm">
                         {event.description}
                       </p>
+
+                      {/* Location */}
+                      <div className="flex items-center gap-2 mb-4">
+                        <MapPin className="w-4 h-4 text-primary" />
+                        <span className="text-sm text-muted-foreground">{event.location}</span>
+                      </div>
                       
                       {/* Tags */}
                       <div className="flex flex-wrap gap-2 mb-4">
