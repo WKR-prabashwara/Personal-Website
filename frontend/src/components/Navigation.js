@@ -219,24 +219,22 @@ const Navigation = () => {
             </div>
           </div>
           
-          {/* Subscribe button - Always on the right */}
+          {/* Subscribe button - Fix shake issue with better animation */}
           <div className="hidden md:flex items-center">
             <button 
               onClick={scrollToNewsletter}
-              className="relative bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background overflow-hidden group"
+              className="relative bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background overflow-hidden group"
               onMouseEnter={(e) => {
                 gsap.to(e.target, {
-                  scale: 1.05,
-                  boxShadow: "0 10px 30px rgba(147, 51, 234, 0.4)",
-                  duration: 0.3,
+                  scale: 1.02,
+                  duration: 0.2,
                   ease: "power2.out"
                 });
               }}
               onMouseLeave={(e) => {
                 gsap.to(e.target, {
                   scale: 1,
-                  boxShadow: "0 0 0 rgba(147, 51, 234, 0)",
-                  duration: 0.3,
+                  duration: 0.2,
                   ease: "power2.out"
                 });
               }}
