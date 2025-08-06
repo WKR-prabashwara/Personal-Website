@@ -101,3 +101,129 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: |
+  when last time I run code front end current data not loaded to backend dashboard. fix all errors and make code clean. and remove un nessasary things.
+
+  use gsap and make website more interactive. also make site smooth. not site is too heavy don't remove anything but I want to fix this.
+
+  make preloader little bit animations.
+
+  add satistics to dashboard. how many visitors co to site, where, how long the looking, what are they look more time, warning notification section. ( when use open dev tools send notification to dashboard with uesr details)
+
+backend:
+  - task: "Fix frontend data loading to dashboard"
+    implemented: false
+    working: "NA"
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to investigate current data loading issues between frontend and backend dashboard"
+
+  - task: "Add comprehensive website analytics system"
+    implemented: false
+    working: "NA" 
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to implement visitor tracking, location data, time spent, page views, and dev tools detection"
+
+frontend:
+  - task: "Fix data loading issues in admin dashboard"
+    implemented: false
+    working: "NA"
+    file: "AdminDashboard.js"
+    stuck_count: 0
+    priority: "high" 
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Current admin dashboard has data loading problems that need investigation"
+
+  - task: "Add GSAP animations for better interactivity"
+    implemented: false
+    working: "NA"
+    file: "multiple files"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to integrate GSAP library and add smooth animations throughout the site"
+
+  - task: "Enhance preloader with better animations"
+    implemented: false
+    working: "NA"
+    file: "Preloader.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Current preloader needs more engaging animations"
+
+  - task: "Add analytics dashboard UI components"
+    implemented: false
+    working: "NA"
+    file: "AdminDashboard.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Need to create UI for displaying visitor stats, location data, time spent, etc"
+
+  - task: "Implement dev tools detection and notification system"
+    implemented: false
+    working: "NA"
+    file: "multiple files"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Detect when users open dev tools and send notification to dashboard"
+
+  - task: "Code cleanup and optimization"
+    implemented: false
+    working: "NA"
+    file: "multiple files"
+    stuck_count: 0
+    priority: "low"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Remove unnecessary code and optimize performance"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Fix frontend data loading to dashboard"
+    - "Add comprehensive website analytics system" 
+    - "Fix data loading issues in admin dashboard"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: "Starting analysis of portfolio application. Identified current services are running. Need to investigate data loading issues and implement comprehensive analytics system with GSAP animations."
