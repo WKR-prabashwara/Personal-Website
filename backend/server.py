@@ -511,6 +511,179 @@ async def update_contact(contact_update: ContactInfoUpdate, current_user: str = 
         await db.contact.insert_one(contact_obj.dict())
         return contact_obj
 
+# ================================
+# ANALYTICS ENDPOINTS
+# ================================
+
+@api_router.post("/analytics/session")
+async def create_visitor_session(session_data: VisitorSessionCreate, request: Request):
+    """Create a new visitor session"""
+    try:
+        # Get IP address from request
+        client_ip = request.client.host
+        forwarded_for = request.headers.get('x-forwarded-for')
+        if forwarded_for:
+            client_ip = forwarded_for.split(',')[0].strip()
+        
+        # Get location data
+        location_data = analytics_service.get_location_data(client_ip)
+        
+        # Parse user agent
+        user_agent_data = analytics_service.parse_user_agent(session_data.user_agent)
+        
+        # Create session object
+        session_dict = session_data.dict()
+        session_dict.update(location_data)
+        session_dict.update(user_agent_data)
+        session_dict['ip_address'] = client_ip
+        
+        session_obj = VisitorSession(**session_dict)
+        await db.visitor_sessions.insert_one(session_obj.dict())
+        
+        return {"status": "success", "session_id": session_obj.id}
+    
+    except Exception as e:
+        logger.error(f"Error creating visitor session: {e}")
+        raise HTTPException(status_code=500, detail="Failed to create session")
+
+@api_router.post("/analytics/pageview")
+async def create_page_view(page_data: PageViewCreate):
+    """Record a page view"""
+    try:
+        page_obj = PageView(**page_data.dict())
+        await db.page_views.insert_one(page_obj.dict())
+        return {"status": "success", "page_view_id": page_obj.id}
+    
+    except Exception as e:
+        logger.error(f"Error creating page view: {e}")
+        raise HTTPException(status_code=500, detail="Failed to record page view")
+
+@api_router.post("/analytics/dev-tools-alert")
+async def create_dev_tools_alert(alert_data: DevToolsAlertCreate, request: Request):
+    """Record dev tools detection"""
+    try:
+        # Get IP address
+        client_ip = request.client.host
+        forwarded_for = request.headers.get('x-forwarded-for')
+        if forwarded_for:
+            client_ip = forwarded_for.split(',')[0].strip()
+        
+        # Get location data
+        location_data = analytics_service.get_location_data(client_ip)
+        
+        # Parse user agent
+        user_agent_data = analytics_service.parse_user_agent(alert_data.user_agent)
+        
+        # Create alert object
+        alert_dict = alert_data.dict()
+        alert_dict.update(location_data)
+        alert_dict['browser'] = user_agent_data['browser']
+        alert_dict['ip_address'] = client_ip
+        
+        alert_obj = DevToolsAlert(**alert_dict)
+        await db.dev_tools_alerts.insert_one(alert_obj.dict())
+        
+        # Emit real-time notification via WebSocket
+        await sio.emit('dev_tools_alert', {
+            'visitor_id': alert_obj.visitor_id,
+            'page_url': alert_obj.page_url,
+            'location': f"{alert_obj.city}, {alert_obj.country}",
+            'browser': alert_obj.browser,
+            'timestamp': alert_obj.timestamp.isoformat(),
+            'ip_address': alert_obj.ip_address[-3:] + '***'  # Partially hide IP
+        })
+        
+        return {"status": "success", "alert_id": alert_obj.id}
+    
+    except Exception as e:
+        logger.error(f"Error creating dev tools alert: {e}")
+        raise HTTPException(status_code=500, detail="Failed to record alert")
+
+@api_router.put("/analytics/session/{session_id}/end")
+async def end_visitor_session(session_id: str, total_time: int):
+    """End a visitor session and record total time"""
+    try:
+        await db.visitor_sessions.update_one(
+            {"id": session_id},
+            {
+                "$set": {
+                    "session_end": datetime.utcnow(),
+                    "total_time_spent": total_time
+                }
+            }
+        )
+        return {"status": "success"}
+    
+    except Exception as e:
+        logger.error(f"Error ending session: {e}")
+        raise HTTPException(status_code=500, detail="Failed to end session")
+
+@api_router.get("/analytics/stats", response_model=AnalyticsStats)
+async def get_analytics_stats(current_user: str = Depends(verify_token)):
+    """Get comprehensive analytics statistics"""
+    try:
+        stats = await analytics_service.calculate_analytics_stats(db)
+        return AnalyticsStats(**stats)
+    
+    except Exception as e:
+        logger.error(f"Error getting analytics stats: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get analytics")
+
+@api_router.get("/analytics/dev-tools-alerts")
+async def get_dev_tools_alerts(current_user: str = Depends(verify_token), limit: int = 50):
+    """Get recent dev tools alerts"""
+    try:
+        alerts = await db.dev_tools_alerts.find().sort("timestamp", -1).limit(limit).to_list(limit)
+        return [DevToolsAlert(**alert) for alert in alerts]
+    
+    except Exception as e:
+        logger.error(f"Error getting dev tools alerts: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get alerts")
+
+@api_router.put("/analytics/dev-tools-alerts/{alert_id}/resolve")
+async def resolve_dev_tools_alert(alert_id: str, current_user: str = Depends(verify_token)):
+    """Mark a dev tools alert as resolved"""
+    try:
+        result = await db.dev_tools_alerts.update_one(
+            {"id": alert_id},
+            {"$set": {"resolved": True}}
+        )
+        if result.modified_count == 0:
+            raise HTTPException(status_code=404, detail="Alert not found")
+        return {"status": "success"}
+    
+    except Exception as e:
+        logger.error(f"Error resolving alert: {e}")
+        raise HTTPException(status_code=500, detail="Failed to resolve alert")
+
+# ================================
+# WEBSOCKET HANDLERS
+# ================================
+
+@sio.event
+async def connect(sid, environ):
+    """Handle client connection"""
+    print(f"Client {sid} connected")
+
+@sio.event
+async def disconnect(sid):
+    """Handle client disconnection"""
+    print(f"Client {sid} disconnected")
+
+@sio.event
+async def join_admin(sid, data):
+    """Join admin room for receiving notifications"""
+    token = data.get('token')
+    if token:
+        try:
+            payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+            username = payload.get("sub")
+            if username == ADMIN_USERNAME:
+                await sio.enter_room(sid, 'admin')
+                print(f"Admin {sid} joined admin room")
+        except jwt.PyJWTError:
+            pass
+
 # Include the router in the main app
 app.include_router(api_router)
 
