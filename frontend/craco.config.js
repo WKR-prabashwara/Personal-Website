@@ -16,7 +16,6 @@ module.exports = {
       // Suppress MediaPipe source map warnings and errors
       webpackConfig.stats = {
         ...webpackConfig.stats,
-        warnings: false,
         warningsFilter: [
           /Failed to parse source map/,
           /Can't resolve 'source-map-url'/,
