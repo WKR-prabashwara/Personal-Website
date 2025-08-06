@@ -186,34 +186,36 @@ const Navigation = () => {
             <span className="hidden sm:block">Prabashwara.</span>
           </div>
           
-          {/* Desktop Navigation - Centered nav links */}
+          {/* Desktop Navigation - More minimalist dock-style */}
           <div className="hidden md:flex items-center justify-center flex-1">
-            <div className="flex items-center space-x-8">
-              {navItems.map((item, index) => (
-                <button 
-                  key={item.id}
-                  ref={el => navItemsRef.current[index] = el}
-                  onClick={() => scrollToSection(item.id)}
-                  className="relative text-muted-foreground hover:text-foreground transition-colors duration-300 focus:outline-none focus:text-foreground group"
-                  onMouseEnter={(e) => {
-                    gsap.to(e.target, {
-                      y: -2,
-                      duration: 0.3,
-                      ease: "power2.out"
-                    });
-                  }}
-                  onMouseLeave={(e) => {
-                    gsap.to(e.target, {
-                      y: 0,
-                      duration: 0.3,
-                      ease: "power2.out"
-                    });
-                  }}
-                >
-                  {item.label}
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-                </button>
-              ))}
+            <div className="bg-background/10 backdrop-blur-md rounded-full px-6 py-2 border border-white/10">
+              <div className="flex items-center space-x-6">
+                {navItems.map((item, index) => (
+                  <button 
+                    key={item.id}
+                    ref={el => navItemsRef.current[index] = el}
+                    onClick={() => scrollToSection(item.id)}
+                    className="relative text-muted-foreground hover:text-foreground transition-colors duration-300 focus:outline-none focus:text-foreground group text-sm font-medium"
+                    onMouseEnter={(e) => {
+                      gsap.to(e.target, {
+                        y: -2,
+                        duration: 0.3,
+                        ease: "power2.out"
+                      });
+                    }}
+                    onMouseLeave={(e) => {
+                      gsap.to(e.target, {
+                        y: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                      });
+                    }}
+                  >
+                    {item.label}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
           
