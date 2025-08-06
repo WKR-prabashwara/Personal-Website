@@ -1,45 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, Waves } from 'lucide-react';
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null);
 
-  // Auto-play when component mounts
-  useEffect(() => {
+  const togglePlayPause = async () => {
     const audio = audioRef.current;
     if (audio) {
-      // Set volume to a reasonable level
-      audio.volume = 0.3;
-      
-      // Attempt to auto-play
-      const playAudio = async () => {
-        try {
+      try {
+        if (isPlaying) {
+          audio.pause();
+          setIsPlaying(false);
+        } else {
+          audio.volume = 0.3;
           await audio.play();
           setIsPlaying(true);
-        } catch (error) {
-          console.log('Auto-play was prevented by browser policy');
-          // Try to play after user interaction
-          const handleUserInteraction = async () => {
-            try {
-              await audio.play();
-              setIsPlaying(true);
-              document.removeEventListener('click', handleUserInteraction);
-              document.removeEventListener('keydown', handleUserInteraction);
-            } catch (e) {
-              console.log('Could not start playback');
-            }
-          };
-          
-          document.addEventListener('click', handleUserInteraction);
-          document.addEventListener('keydown', handleUserInteraction);
         }
-      };
-      
-      playAudio();
+      } catch (error) {
+        console.log('Audio playback error:', error);
+      }
     }
-  }, []);
+  };
 
   const toggleMute = () => {
     const audio = audioRef.current;
@@ -59,10 +42,10 @@ const MusicPlayer = () => {
           <div
             key={index}
             className={`w-1 bg-gradient-to-t from-purple-400 to-cyan-400 rounded-full transition-all duration-300 ${
-              isActive ? 'animate-pulse' : ''
+              isActive ? 'animate-bounce' : ''
             }`}
             style={{
-              height: isActive ? `${12 + Math.sin(Date.now() * 0.01 + index) * 8}px` : '4px',
+              height: isActive ? `${8 + (index % 2) * 6}px` : '4px',
               animationDelay: `${index * 0.1}s`,
               animationDuration: `${0.6 + index * 0.1}s`,
             }}
@@ -81,21 +64,32 @@ const MusicPlayer = () => {
         className="hidden"
         preload="auto"
       >
-        {/* Placeholder for space music - replace with actual music file */}
+        {/* You can add your music file here */}
         <source src="/space-music.mp3" type="audio/mpeg" />
-        {/* Fallback silence for demonstration */}
+        {/* Fallback: Empty audio for demonstration */}
         <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS" type="audio/wav" />
       </audio>
 
       {/* Music Player UI */}
       <div className="fixed bottom-6 left-6 z-50 flex items-center gap-3">
-        {/* Waving Bars */}
-        <div className="bg-black/80 backdrop-blur-sm border border-purple-500/30 rounded-full p-3">
-          <WavingBars isActive={isPlaying && !isMuted} />
-        </div>
+        {/* Wave Icon to Start Music */}
+        <button
+          onClick={togglePlayPause}
+          className="w-12 h-12 bg-black/80 backdrop-blur-sm border border-purple-500/30 rounded-full flex items-center justify-center hover:bg-purple-600/20 transition-all duration-300 transform hover:scale-105 group"
+          title={isPlaying ? 'Pause Music' : 'Start Music'}
+        >
+          <Waves className={`w-5 h-5 text-white transition-all duration-300 ${isPlaying ? 'text-purple-400' : 'text-white'} group-hover:text-purple-300`} />
+        </button>
 
-        {/* Only Mute Button - No Play Button */}
-        <div className="flex items-center">
+        {/* Waving Bars - Only show when playing */}
+        {isPlaying && (
+          <div className="bg-black/80 backdrop-blur-sm border border-purple-500/30 rounded-full p-3 transition-all duration-300">
+            <WavingBars isActive={isPlaying && !isMuted} />
+          </div>
+        )}
+
+        {/* Mute Button - Only show when playing */}
+        {isPlaying && (
           <button
             onClick={toggleMute}
             className="w-10 h-10 bg-black/80 backdrop-blur-sm border border-purple-500/30 rounded-full flex items-center justify-center hover:bg-purple-600/20 transition-all duration-300 transform hover:scale-105"
@@ -107,7 +101,7 @@ const MusicPlayer = () => {
               <Volume2 className="w-4 h-4 text-white" />
             )}
           </button>
-        </div>
+        )}
       </div>
     </>
   );
