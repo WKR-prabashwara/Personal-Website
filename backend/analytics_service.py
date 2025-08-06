@@ -1,44 +1,42 @@
-import geoip2.database
-import geoip2.errors
-from maxminddb_geolite2 import geolite2
 import asyncio
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 import re
 from user_agents import parse as parse_user_agent
+import requests
 
 class AnalyticsService:
     def __init__(self):
-        try:
-            self.reader = geolite2.reader()
-        except Exception as e:
-            print(f"GeoIP database not available: {e}")
-            self.reader = None
+        self.reader = None
+        print("Analytics service initialized")
 
     def get_location_data(self, ip_address: str) -> Dict[str, Optional[str]]:
-        """Get location data from IP address"""
-        if not self.reader or ip_address in ['127.0.0.1', 'localhost', '::1']:
+        """Get location data from IP address using a free IP geolocation service"""
+        if ip_address in ['127.0.0.1', 'localhost', '::1']:
             return {
-                'country': 'Unknown',
-                'city': 'Unknown',
-                'region': 'Unknown',
+                'country': 'Local',
+                'city': 'Local',
+                'region': 'Local',
                 'latitude': None,
                 'longitude': None
             }
 
         try:
-            response = self.reader.get(ip_address)
-            if response:
+            # Using ipapi.co free service (100 requests per day limit)
+            response = requests.get(f'https://ipapi.co/{ip_address}/json/', timeout=5)
+            if response.status_code == 200:
+                data = response.json()
                 return {
-                    'country': response.get('country', {}).get('names', {}).get('en', 'Unknown'),
-                    'city': response.get('city', {}).get('names', {}).get('en', 'Unknown'),
-                    'region': response.get('subdivisions', [{}])[0].get('names', {}).get('en', 'Unknown') if response.get('subdivisions') else 'Unknown',
-                    'latitude': float(response.get('location', {}).get('latitude', 0)) if response.get('location', {}).get('latitude') else None,
-                    'longitude': float(response.get('location', {}).get('longitude', 0)) if response.get('location', {}).get('longitude') else None
+                    'country': data.get('country_name', 'Unknown'),
+                    'city': data.get('city', 'Unknown'),
+                    'region': data.get('region', 'Unknown'),
+                    'latitude': float(data.get('latitude')) if data.get('latitude') else None,
+                    'longitude': float(data.get('longitude')) if data.get('longitude') else None
                 }
         except Exception as e:
             print(f"Error getting location for IP {ip_address}: {e}")
 
+        # Fallback for demo purposes
         return {
             'country': 'Unknown',
             'city': 'Unknown', 
