@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import {
   slideInFromLeft,
   slideInFromRight,
@@ -37,6 +38,14 @@ const HeroSection = () => {
     
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Interactive scroll to explore function
+  const handleScrollExplore = () => {
+    const nextSection = document.getElementById('about');
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <section 
@@ -124,25 +133,26 @@ const HeroSection = () => {
         </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator */}
+      {/* Interactive Scroll Indicator */}
       <motion.div 
         variants={scaleIn(1.5)}
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30"
       >
-        <div className="flex flex-col items-center text-white/70">
-          <p className="mb-2 text-sm">Scroll to explore</p>
+        <button 
+          onClick={handleScrollExplore}
+          className="flex flex-col items-center text-white/70 hover:text-white transition-colors duration-300 cursor-pointer group focus:outline-none"
+        >
+          <p className="mb-2 text-sm group-hover:text-purple-300 transition-colors">Scroll to explore</p>
           <div className="w-px h-12 bg-white/20 relative">
             <div 
               className="absolute top-0 w-px bg-gradient-to-b from-purple-400 to-cyan-400 transition-all duration-300"
               style={{ height: `${scrollProgress * 100}%` }}
             />
           </div>
-          <div className="mt-2 animate-bounce">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
+          <div className="mt-2 animate-bounce group-hover:animate-pulse">
+            <ChevronDown className="w-4 h-4 group-hover:text-purple-300 transition-colors" />
           </div>
-        </div>
+        </button>
       </motion.div>
     </section>
   );

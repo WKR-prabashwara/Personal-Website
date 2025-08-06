@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -10,37 +10,36 @@ const MusicPlayer = () => {
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
-      // Attempt to auto-play (might be blocked by browser policy)
+      // Set volume to a reasonable level
+      audio.volume = 0.3;
+      
+      // Attempt to auto-play
       const playAudio = async () => {
         try {
           await audio.play();
           setIsPlaying(true);
         } catch (error) {
           console.log('Auto-play was prevented by browser policy');
-          setIsPlaying(false);
+          // Try to play after user interaction
+          const handleUserInteraction = async () => {
+            try {
+              await audio.play();
+              setIsPlaying(true);
+              document.removeEventListener('click', handleUserInteraction);
+              document.removeEventListener('keydown', handleUserInteraction);
+            } catch (e) {
+              console.log('Could not start playback');
+            }
+          };
+          
+          document.addEventListener('click', handleUserInteraction);
+          document.addEventListener('keydown', handleUserInteraction);
         }
       };
       
       playAudio();
     }
   }, []);
-
-  const togglePlay = async () => {
-    const audio = audioRef.current;
-    if (audio) {
-      try {
-        if (isPlaying) {
-          audio.pause();
-          setIsPlaying(false);
-        } else {
-          await audio.play();
-          setIsPlaying(true);
-        }
-      } catch (error) {
-        console.log('Playback failed:', error);
-      }
-    }
-  };
 
   const toggleMute = () => {
     const audio = audioRef.current;
@@ -75,14 +74,14 @@ const MusicPlayer = () => {
 
   return (
     <>
-      {/* Audio element - Interstellar music placeholder */}
+      {/* Audio element - Space/ambient music */}
       <audio
         ref={audioRef}
         loop
         className="hidden"
         preload="auto"
       >
-        {/* Placeholder for space music - replace with actual Interstellar music file */}
+        {/* Placeholder for space music - replace with actual music file */}
         <source src="/space-music.mp3" type="audio/mpeg" />
         {/* Fallback silence for demonstration */}
         <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmMcBjiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS2fLLeSsFJHfH8N2QQAoUXrTp66hVFApGn+DyvmQcBTiS" type="audio/wav" />
@@ -95,26 +94,12 @@ const MusicPlayer = () => {
           <WavingBars isActive={isPlaying && !isMuted} />
         </div>
 
-        {/* Control Buttons */}
-        <div className="flex items-center gap-2">
-          {/* Play/Pause Button */}
-          <button
-            onClick={togglePlay}
-            className="w-10 h-10 bg-gradient-to-r from-purple-600 to-cyan-600 rounded-full flex items-center justify-center hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
-            title={isPlaying ? 'Pause Music' : 'Play Music'}
-          >
-            {isPlaying ? (
-              <Pause className="w-4 h-4 text-white" />
-            ) : (
-              <Play className="w-4 h-4 text-white ml-0.5" />
-            )}
-          </button>
-
-          {/* Mute Button */}
+        {/* Only Mute Button - No Play Button */}
+        <div className="flex items-center">
           <button
             onClick={toggleMute}
             className="w-10 h-10 bg-black/80 backdrop-blur-sm border border-purple-500/30 rounded-full flex items-center justify-center hover:bg-purple-600/20 transition-all duration-300 transform hover:scale-105"
-            title={isMuted ? 'Unmute' : 'Mute'}
+            title={isMuted ? 'Unmute Music' : 'Mute Music'}
           >
             {isMuted ? (
               <VolumeX className="w-4 h-4 text-white" />

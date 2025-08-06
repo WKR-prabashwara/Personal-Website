@@ -22,12 +22,10 @@ const Navigation = () => {
   };
 
   const scrollToNewsletter = () => {
-    // Scroll to the newsletter section in BlogSection
     const newsletterSection = document.getElementById('newsletter-section');
     if (newsletterSection) {
       newsletterSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
-      // Fallback to blog section if newsletter not found
       const blogSection = document.getElementById('blog');
       if (blogSection) {
         blogSection.scrollIntoView({ behavior: 'smooth' });
@@ -51,13 +49,13 @@ const Navigation = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
+          {/* Logo */}
           <div className="text-foreground text-xl font-bold">
             Prabashwara.
           </div>
           
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center">
-            {/* Centered navigation links */}
+          {/* Desktop Navigation - Centered nav links */}
+          <div className="hidden md:flex items-center justify-center flex-1">
             <div className="flex items-center space-x-8">
               {navItems.map((item) => (
                 <button 
@@ -69,11 +67,13 @@ const Navigation = () => {
                 </button>
               ))}
             </div>
-            
-            {/* Subscribe button */}
+          </div>
+          
+          {/* Subscribe button - Always on the right */}
+          <div className="hidden md:flex items-center">
             <button 
               onClick={scrollToNewsletter}
-              className="ml-8 bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background"
+              className="bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background"
             >
               Subscribe
             </button>
