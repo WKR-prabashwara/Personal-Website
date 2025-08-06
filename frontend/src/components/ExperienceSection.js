@@ -47,21 +47,21 @@ const ExperienceSection = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid gap-8 lg:gap-12 lg:grid-cols-2">
           {/* Skills Section */}
-          <div className="space-y-8">
-            <div className="bg-card border border-border rounded-2xl p-8">
-              <h3 className="text-2xl font-semibold text-foreground mb-8">Technical Skills</h3>
-              <div className="space-y-6">
+          <div className="space-y-6 sm:space-y-8">
+            <div className="bg-card border border-border rounded-2xl p-4 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-6 sm:mb-8">Technical Skills</h3>
+              <div className="space-y-4 sm:space-y-6">
                 {skills.map((skill, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-foreground font-medium">{skill.name}</span>
-                      <span className="text-muted-foreground text-sm">{skill.level}%</span>
+                      <span className="text-foreground font-medium text-sm sm:text-base">{skill.name}</span>
+                      <span className="text-muted-foreground text-xs sm:text-sm">{skill.level}%</span>
                     </div>
-                    <div className="w-full bg-secondary rounded-full h-3">
+                    <div className="w-full bg-secondary rounded-full h-2 sm:h-3">
                       <div
-                        className="bg-gradient-to-r from-primary to-primary/80 h-3 rounded-full transition-all duration-1000 ease-out"
+                        className="bg-gradient-to-r from-primary to-primary/80 h-2 sm:h-3 rounded-full transition-all duration-1000 ease-out"
                         style={{
                           width: `${skill.level}%`,
                           animationDelay: `${index * 100}ms`
@@ -75,35 +75,34 @@ const ExperienceSection = () => {
           </div>
 
           {/* Experience Details */}
-          <div className="space-y-8">
-            <div className="bg-card border border-border rounded-2xl p-8">
-              <h3 className="text-2xl font-semibold text-foreground mb-6">Current Status</h3>
-              <div className="space-y-6">
+          <div className="space-y-6 sm:space-y-8">
+            <div className="bg-card border border-border rounded-2xl p-4 sm:p-8">
+              <h3 className="text-xl sm:text-2xl font-semibold text-foreground mb-4 sm:mb-6">Current Status</h3>
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <h4 className="text-lg font-medium text-foreground mb-2">Academic Level</h4>
-                  <p className="text-muted-foreground">
+                  <h4 className="text-base sm:text-lg font-medium text-foreground mb-2">Academic Level</h4>
+                  <p className="text-muted-foreground text-sm sm:text-base">
                     Advanced Level Student specializing in Mathematics and Science stream
                   </p>
                 </div>
                 
                 <div>
-                  <h4 className="text-lg font-medium text-foreground mb-2">Learning Focus</h4>
-                  <p className="text-muted-foreground">
+                  <h4 className="text-base sm:text-lg font-medium text-foreground mb-2">Learning Focus</h4>
+                  <p className="text-muted-foreground text-sm sm:text-base">
                     Currently exploring advanced mathematical concepts, theoretical physics, 
                     and practical applications in programming and cryptography.
                   </p>
                 </div>
                 
                 <div>
-                  <h4 className="text-lg font-medium text-foreground mb-2">Future Goals</h4>
-                  <p className="text-muted-foreground">
+                  <h4 className="text-base sm:text-lg font-medium text-foreground mb-2">Future Goals</h4>
+                  <p className="text-muted-foreground text-sm sm:text-base">
                     Aspiring to contribute to mathematical research and develop innovative 
                     solutions in technology and science.
                   </p>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
