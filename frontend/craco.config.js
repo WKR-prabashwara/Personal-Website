@@ -13,39 +13,48 @@ module.exports = {
     },
     configure: (webpackConfig) => {
       
-      // Suppress MediaPipe source map warnings
-      webpackConfig.module.rules.push({
-        test: /\.js$/,
-        enforce: 'pre',
-        use: ['source-map-loader'],
-        exclude: [
-          /node_modules\/@mediapipe\/tasks-vision/,
-        ],
-      });
+      // Suppress MediaPipe source map warnings and errors
+      webpackConfig.stats = {
+        ...webpackConfig.stats,
+        warnings: false,
+        warningsFilter: [
+          /Failed to parse source map/,
+          /Can't resolve 'source-map-url'/,
+          /@mediapipe/,
+        ]
+      };
 
-      // Configure source-map-loader to ignore MediaPipe warnings
-      const sourceMapLoaderRule = webpackConfig.module.rules.find(
-        rule => rule.use && rule.use.some && rule.use.some(use => 
-          use && use.loader && use.loader.includes('source-map-loader')
-        )
-      );
-      
-      if (sourceMapLoaderRule) {
-        sourceMapLoaderRule.exclude = [
-          ...(sourceMapLoaderRule.exclude || []),
-          /node_modules\/@mediapipe\/tasks-vision/,
-        ];
-      }
-
-      // Disable source map warnings for MediaPipe
+      // Configure ignoreWarnings to suppress MediaPipe warnings
       webpackConfig.ignoreWarnings = [
         ...(webpackConfig.ignoreWarnings || []),
-        {
-          module: /node_modules\/@mediapipe\/tasks-vision/,
-          message: /Failed to parse source map/,
+        function (warning) {
+          return warning.message && (
+            warning.message.includes('@mediapipe/tasks-vision') ||
+            warning.message.includes('Failed to parse source map') ||
+            warning.message.includes('vision_bundle_mjs.js.map')
+          );
         },
-        /Failed to parse source map.*@mediapipe\/tasks-vision/,
+        /Failed to parse source map.*@mediapipe.*vision_bundle_mjs\.js\.map/,
+        /Failed to parse source map from.*@mediapipe.*tasks-vision/,
       ];
+
+      // Configure module rules to exclude MediaPipe from source-map-loader
+      webpackConfig.module.rules.forEach((rule) => {
+        if (rule.enforce === 'pre' && rule.use) {
+          rule.use.forEach((use) => {
+            if (use.loader && use.loader.includes('source-map-loader')) {
+              use.options = use.options || {};
+              use.options.filterSourceMappingUrl = (url, resourcePath) => {
+                // Skip source maps for MediaPipe modules
+                if (resourcePath && resourcePath.includes('@mediapipe/tasks-vision')) {
+                  return false;
+                }
+                return true;
+              };
+            }
+          });
+        }
+      });
       
       // Disable hot reload completely if environment variable is set
       if (config.disableHotReload) {
