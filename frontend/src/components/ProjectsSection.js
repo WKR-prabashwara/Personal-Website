@@ -116,13 +116,19 @@ const ProjectsSection = () => {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-2 pt-2 sm:pt-4">
-                  <button className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                  <button 
+                    onClick={() => alert("Coming Soon - Project details will be available soon!")}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm"
+                  >
                     <ExternalLink className="w-4 h-4" />
                     View Details
                   </button>
-                  <button className="flex items-center justify-center gap-2 px-4 py-2 bg-secondary text-foreground rounded-lg hover:bg-secondary/80 transition-colors text-sm">
-                    <Github className="w-4 h-4" />
-                    Code
+                  <button 
+                    onClick={() => alert("Research Paper - Coming soon!")}
+                    className="flex items-center justify-center gap-2 px-4 py-2 bg-secondary text-foreground rounded-lg hover:bg-secondary/80 transition-colors text-sm"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Research Paper
                   </button>
                 </div>
               </div>
