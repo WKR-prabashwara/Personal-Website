@@ -264,14 +264,17 @@ const Navigation = () => {
             {navItems.map((item) => (
               <button 
                 key={item.id}
-                onClick={() => scrollToSection(item.id)}
+                onClick={() => handleMobileNavClick(item.id)}
                 className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-left focus:outline-none focus:text-foreground transform hover:translate-x-2"
               >
                 {item.label}
               </button>
             ))}
             <button 
-              onClick={scrollToNewsletter}
+              onClick={() => {
+                scrollToNewsletter();
+                setIsMenuOpen(false);
+              }}
               className="bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 w-fit focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background"
             >
               Subscribe
