@@ -30,3 +30,4 @@ geoip2>=5.1.0
 maxminddb-geolite2>=2018.703
 fastapi-socketio>=0.0.10
 aiofiles>=24.1.0
+user-agents>=2.2.0
