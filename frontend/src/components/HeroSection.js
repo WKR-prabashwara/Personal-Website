@@ -53,25 +53,27 @@ const HeroSection = () => {
       ref={sectionRef}
       className="relative h-screen overflow-hidden"
     >
-      {/* Black Hole Video Background */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute top-0 left-0 w-full h-full object-cover z-[1] rotate-180"
-      >
-        <source src="/blackhole.webm" type="video/webm" />
-      </video>
-
       {/* Star Background */}
       <StarBackground />
       
-      {/* Content Overlay */}
+      {/* Black Hole Video - Moved to Top */}
+      <div className="absolute top-0 left-0 w-full h-80 z-[1]">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover rotate-180"
+        >
+          <source src="/blackhole.webm" type="video/webm" />
+        </video>
+      </div>
+      
+      {/* Content - Positioned Below Animation */}
       <motion.div 
         initial="hidden"
         animate="visible"
-        className="absolute inset-0 z-20 flex flex-col items-center justify-center text-foreground px-6"
+        className="absolute top-80 left-0 right-0 bottom-0 z-20 flex flex-col items-center justify-center text-foreground px-6"
         style={{ 
           opacity: scrollProgress < 0.7 ? 1 - (scrollProgress * 1.2) : 0,
           transform: `translateY(${scrollProgress * 30}px) scale(${1 - scrollProgress * 0.1})`,
