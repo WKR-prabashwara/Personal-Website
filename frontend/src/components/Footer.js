@@ -79,7 +79,8 @@ const Footer = () => {
                 <li key={index}>
                   <button
                     onClick={() => handleLinkClick(link.href)}
-                    className="text-muted-foreground hover:text-foreground transition-colors text-xs sm:text-sm hover:translate-x-1 transform duration-300 text-left"
+                    className="text-muted-foreground hover:text-foreground transition-colors text-xs sm:text-sm hover:translate-x-1 transform duration-300 text-left relative z-10 cursor-pointer"
+                    style={{ pointerEvents: 'auto' }}
                   >
                     {link.label}
                   </button>
