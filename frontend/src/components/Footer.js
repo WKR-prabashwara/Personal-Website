@@ -93,7 +93,8 @@ const Footer = () => {
             <h4 className="text-base sm:text-lg font-semibold text-foreground">Navigation</h4>
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 group transform hover:scale-105"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 group transform hover:scale-105 relative z-10 cursor-pointer"
+              style={{ pointerEvents: 'auto' }}
             >
               <ArrowUp className="w-4 h-4 group-hover:-translate-y-2 group-hover:text-primary transition-all duration-300" />
               <span className="text-xs sm:text-sm group-hover:text-primary">Back to Top</span>
