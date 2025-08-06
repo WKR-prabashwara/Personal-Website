@@ -69,11 +69,11 @@ const HeroSection = () => {
         </video>
       </div>
       
-      {/* Content Overlay - Back to Original Centered Position */}
+      {/* Content - Positioned BELOW the Animation */}
       <motion.div 
         initial="hidden"
         animate="visible"
-        className="absolute inset-0 z-20 flex flex-col items-center justify-center text-foreground px-6"
+        className="absolute top-96 left-0 right-0 bottom-0 z-20 flex flex-col items-center justify-center text-foreground px-6"
         style={{ 
           opacity: scrollProgress < 0.7 ? 1 - (scrollProgress * 1.2) : 0,
           transform: `translateY(${scrollProgress * 30}px) scale(${1 - scrollProgress * 0.1})`,
