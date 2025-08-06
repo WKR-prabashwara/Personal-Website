@@ -77,7 +77,7 @@ const Navigation = () => {
     const newsletterSection = document.getElementById('newsletter-section');
     if (newsletterSection) {
       gsap.to(window, {
-        duration: 1.5,
+        duration: 1.2,
         scrollTo: {
           y: newsletterSection,
           offsetY: 80
@@ -88,7 +88,7 @@ const Navigation = () => {
       const blogSection = document.getElementById('blog');
       if (blogSection) {
         gsap.to(window, {
-          duration: 1.5,
+          duration: 1.2,
           scrollTo: {
             y: blogSection,
             offsetY: 80
