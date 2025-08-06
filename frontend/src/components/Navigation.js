@@ -103,9 +103,10 @@ const Navigation = () => {
   };
 
   const toggleMobileMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    const newState = !isMenuOpen;
+    setIsMenuOpen(newState);
     
-    if (!isMenuOpen) {
+    if (newState) {
       // Opening animation
       gsap.set(mobileMenuRef.current, { display: 'block' });
       gsap.fromTo(mobileMenuRef.current, {
@@ -142,6 +143,21 @@ const Navigation = () => {
         }
       });
     }
+  };
+
+  const handleMobileNavClick = (sectionId) => {
+    scrollToSection(sectionId);
+    // Force close mobile menu
+    setIsMenuOpen(false);
+    gsap.to(mobileMenuRef.current, {
+      opacity: 0,
+      y: -20,
+      duration: 0.25,
+      ease: "power2.in",
+      onComplete: () => {
+        gsap.set(mobileMenuRef.current, { display: 'none' });
+      }
+    });
   };
 
   const navItems = [
