@@ -17,7 +17,7 @@ import AdminApp from "./components/AdminApp";
 
 // Main Portfolio Component
 const Portfolio = () => {
-  const [loading, setLoading] = useState(false); // Enable preloader
+  const [loading, setLoading] = useState(true); // Enable preloader
 
   const handlePreloaderComplete = () => {
     setLoading(false);
