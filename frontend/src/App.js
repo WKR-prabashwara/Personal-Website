@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Preloader from "./components/Preloader";
@@ -12,8 +13,10 @@ import BlogSection from "./components/BlogSection";
 import ContactSection from "./components/ContactSection";
 import Footer from "./components/Footer";
 import MusicPlayer from "./components/MusicPlayer";
+import AdminApp from "./components/AdminApp";
 
-function App() {
+// Main Portfolio Component
+const Portfolio = () => {
   const [loading, setLoading] = useState(false); // Enable preloader
 
   const handlePreloaderComplete = () => {
@@ -21,24 +24,36 @@ function App() {
   };
 
   return (
+    <div className="App">
+      {loading && <Preloader onComplete={handlePreloaderComplete} />}
+      {!loading && (
+        <>
+          <Navigation />
+          <HeroSection />
+          <AboutSection />
+          <ExperienceSection />
+          <ProjectsSection />
+          <TimelineSection />
+          <BlogSection />
+          <ContactSection />
+          <Footer />
+          <MusicPlayer />
+        </>
+      )}
+    </div>
+  );
+};
+
+function App() {
+  return (
     <ThemeProvider>
-      <div className="App">
-        {loading && <Preloader onComplete={handlePreloaderComplete} />}
-        {!loading && (
-          <>
-            <Navigation />
-            <HeroSection />
-            <AboutSection />
-            <ExperienceSection />
-            <ProjectsSection />
-            <TimelineSection />
-            <BlogSection />
-            <ContactSection />
-            <Footer />
-            <MusicPlayer />
-          </>
-        )}
-      </div>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Portfolio />} />
+          <Route path="/admin" element={<AdminApp />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }
