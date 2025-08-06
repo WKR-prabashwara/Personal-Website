@@ -25,8 +25,8 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative bg-card border-t border-border py-8 sm:py-12">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+    <footer className="relative bg-card border-t border-border py-8 sm:py-12 z-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-50">
         <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3 mb-6 sm:mb-8">
           {/* Brand Section */}
           <div className="space-y-3 sm:space-y-4">
