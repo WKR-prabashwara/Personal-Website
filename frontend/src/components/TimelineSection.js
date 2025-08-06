@@ -101,32 +101,39 @@ const TimelineSection = () => {
 
         {/* Timeline with Central Axis */}
         <div className="relative">
-          {/* Central Timeline Line - Gray colored and thinner */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gray-400/60"></div>
+          {/* Central Timeline Line - Hidden on mobile, visible on md+ */}
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gray-400/60"></div>
+          
+          {/* Mobile Timeline Line - Left side */}
+          <div className="md:hidden absolute left-8 top-0 bottom-0 w-0.5 bg-gray-400/60"></div>
 
           <div className="space-y-12">
             {visibleEvents.map((event, index) => (
               <div
                 key={event.id}
                 className={`relative flex items-center ${
-                  index % 2 === 0 ? 'justify-start' : 'justify-end'
-                }`}
+                  index % 2 === 0 ? 'md:justify-start' : 'md:justify-end'
+                } justify-start`}
               >
-                {/* Small dot circle on timeline - smaller and no year text */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-2 border-background flex items-center justify-center z-10">
+                {/* Timeline dot - Responsive positioning */}
+                <div className="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 bg-primary rounded-full border-2 border-background flex items-center justify-center z-10">
                 </div>
 
-                {/* Timeline Card */}
-                <div className={`w-5/12 ${index % 2 === 0 ? 'mr-auto pr-8' : 'ml-auto pl-8'}`}>
+                {/* Timeline Card - Mobile full width, desktop alternating */}
+                <div className={`w-full pl-16 md:pl-0 ${
+                  index % 2 === 0 
+                    ? 'md:w-5/12 md:mr-auto md:pr-8' 
+                    : 'md:w-5/12 md:ml-auto md:pl-8'
+                }`}>
                   <div className="bg-card border border-border rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                     {/* Card Content */}
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                       <div className="flex items-center gap-2 mb-3">
                         <Calendar className="w-4 h-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{event.dateRange}</span>
+                        <span className="text-xs sm:text-sm text-muted-foreground">{event.dateRange}</span>
                       </div>
                       
-                      <h3 className="text-xl font-bold text-foreground mb-3">
+                      <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3">
                         {event.title}
                       </h3>
                       
@@ -136,8 +143,8 @@ const TimelineSection = () => {
 
                       {/* Location */}
                       <div className="flex items-center gap-2 mb-4">
-                        <MapPin className="w-4 h-4 text-primary" />
-                        <span className="text-sm text-muted-foreground">{event.location}</span>
+                        <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                        <span className="text-xs sm:text-sm text-muted-foreground">{event.location}</span>
                       </div>
                       
                       {/* Tags */}
