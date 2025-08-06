@@ -56,8 +56,8 @@ const HeroSection = () => {
       {/* Star Background */}
       <StarBackground />
       
-      {/* Black Hole Video - Positioned Below Header */}
-      <div className="absolute top-16 left-0 w-full h-[28rem] z-[1] overflow-hidden">
+      {/* Black Hole Video - At Top Below Header */}
+      <div className="absolute top-20 left-0 w-full h-64 z-[1] overflow-hidden">
         <video
           autoPlay
           muted
@@ -67,15 +67,13 @@ const HeroSection = () => {
         >
           <source src="/blackhole.webm" type="video/webm" />
         </video>
-        {/* Gradient overlay to blend with background */}
-        <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black to-transparent z-10"></div>
       </div>
       
-      {/* Content - Positioned Below Animation */}
+      {/* Content Overlay - Back to Original Centered Position */}
       <motion.div 
         initial="hidden"
         animate="visible"
-        className="absolute top-[30rem] left-0 right-0 bottom-0 z-20 flex flex-col items-center justify-center text-foreground px-6"
+        className="absolute inset-0 z-20 flex flex-col items-center justify-center text-foreground px-6"
         style={{ 
           opacity: scrollProgress < 0.7 ? 1 - (scrollProgress * 1.2) : 0,
           transform: `translateY(${scrollProgress * 30}px) scale(${1 - scrollProgress * 0.1})`,
