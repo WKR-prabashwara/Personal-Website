@@ -115,12 +115,12 @@ const TimelineSection = () => {
                   index % 2 === 0 ? 'md:justify-start' : 'md:justify-end'
                 } justify-start`}
               >
-                {/* Timeline dot - Responsive positioning */}
-                <div className="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-4 h-4 bg-primary rounded-full border-2 border-background flex items-center justify-center z-10">
+                {/* Timeline dot - Better mobile positioning */}
+                <div className="absolute left-6 md:left-1/2 transform md:-translate-x-1/2 -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-2 border-background flex items-center justify-center z-10">
                 </div>
 
-                {/* Timeline Card - Mobile full width, desktop alternating */}
-                <div className={`w-full pl-16 md:pl-0 ${
+                {/* Timeline Card - Better mobile alignment */}
+                <div className={`w-full pl-12 pr-4 md:pl-0 md:pr-0 ${
                   index % 2 === 0 
                     ? 'md:w-5/12 md:mr-auto md:pr-8' 
                     : 'md:w-5/12 md:ml-auto md:pl-8'
