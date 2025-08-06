@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AdminLogin from './AdminLogin';
-import AdminDashboard from './AdminDashboard';
+import EnhancedAdminDashboard from './EnhancedAdminDashboard';
 import axios from 'axios';
 
 const AdminApp = () => {
@@ -62,7 +62,7 @@ const AdminApp = () => {
   return (
     <>
       {isAuthenticated ? (
-        <AdminDashboard onLogout={handleLogout} />
+        <EnhancedAdminDashboard onLogout={handleLogout} />
       ) : (
         <AdminLogin onLogin={handleLogin} />
       )}
