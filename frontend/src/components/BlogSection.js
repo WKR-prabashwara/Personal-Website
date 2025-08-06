@@ -149,9 +149,9 @@ const BlogSection = () => {
   };
 
   return (
-    <section id="blog" className="relative min-h-screen py-20">
+    <section id="blog" className="relative min-h-screen py-20 bg-black">
       {/* Background */}
-      <div className="absolute inset-0 bg-background">
+      <div className="absolute inset-0">
         {[...Array(100)].map((_, i) => (
           <div
             key={i}
