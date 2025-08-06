@@ -1,8 +1,9 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+import socketio
 import os
 import logging
 from pathlib import Path
@@ -14,6 +15,13 @@ import jwt
 import bcrypt
 from enum import Enum
 from contextlib import asynccontextmanager
+
+# Import analytics models and service
+from analytics_models import (
+    VisitorSession, PageView, DevToolsAlert, AnalyticsStats,
+    VisitorSessionCreate, PageViewCreate, DevToolsAlertCreate
+)
+from analytics_service import analytics_service
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
