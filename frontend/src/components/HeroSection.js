@@ -56,8 +56,8 @@ const HeroSection = () => {
       {/* Star Background */}
       <StarBackground />
       
-      {/* Black Hole Video - Moved to Top */}
-      <div className="absolute top-0 left-0 w-full h-[32rem] z-[1] overflow-hidden">
+      {/* Black Hole Video - Positioned Below Header */}
+      <div className="absolute top-16 left-0 w-full h-[28rem] z-[1] overflow-hidden">
         <video
           autoPlay
           muted
@@ -75,7 +75,7 @@ const HeroSection = () => {
       <motion.div 
         initial="hidden"
         animate="visible"
-        className="absolute top-[32rem] left-0 right-0 bottom-0 z-20 flex flex-col items-center justify-center text-foreground px-6"
+        className="absolute top-[30rem] left-0 right-0 bottom-0 z-20 flex flex-col items-center justify-center text-foreground px-6"
         style={{ 
           opacity: scrollProgress < 0.7 ? 1 - (scrollProgress * 1.2) : 0,
           transform: `translateY(${scrollProgress * 30}px) scale(${1 - scrollProgress * 0.1})`,
