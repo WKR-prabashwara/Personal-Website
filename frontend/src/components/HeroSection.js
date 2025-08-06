@@ -56,22 +56,22 @@ const HeroSection = () => {
       {/* Star Background */}
       <StarBackground />
       
-      {/* Black Hole Video - Positioned like target website */}
+      {/* Black Hole Video - Moved even higher to show only bottom part */}
       <video
         autoPlay
         muted
         loop
         playsInline
-        className="rotate-180 absolute top-[-340px] h-full w-full left-0 z-[1] object-cover"
+        className="rotate-180 absolute top-[-450px] h-full w-full left-0 z-[1] object-cover"
       >
         <source src="/blackhole.webm" type="video/webm" />
       </video>
       
-      {/* Content Overlay - Positioned with proper margin */}
+      {/* Content Overlay - Adjusted to be more visible */}
       <motion.div 
         initial="hidden"
         animate="visible"
-        className="flex flex-col items-center justify-center px-6 mt-40 w-full z-20 min-h-screen"
+        className="flex flex-col items-center justify-center px-6 pt-20 w-full z-20 min-h-screen"
         style={{ 
           opacity: scrollProgress < 0.7 ? 1 - (scrollProgress * 1.2) : 0,
           transform: `translateY(${scrollProgress * 30}px) scale(${1 - scrollProgress * 0.1})`,
