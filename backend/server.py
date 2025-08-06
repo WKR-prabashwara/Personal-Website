@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 import jwt
 import bcrypt
 from enum import Enum
+from contextlib import asynccontextmanager
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -27,8 +28,25 @@ JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'default-secret-key')
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_TIME = timedelta(hours=24)
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Lifespan event handler
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info("Portfolio Backend API started")
+    yield
+    # Shutdown
+    client.close()
+    logger.info("Database connection closed")
+
 # Create the main app with lifespan support
-app = FastAPI(lifespan=None)
+app = FastAPI(lifespan=lifespan)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
