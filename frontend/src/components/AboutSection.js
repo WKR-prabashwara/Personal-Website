@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, BookOpen, Code, Calculator } from 'lucide-react';
+import { User, BookOpen, Code, Calculator, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { slideInFromLeft, slideInFromRight, slideInFromTop, scaleIn } from '../utils/motion';
 
@@ -36,8 +36,9 @@ const AboutSection = () => {
             variants={slideInFromTop}
             className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20 inline-block"
           >
-            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              ✨ Mathematics Student Portfolio
+            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center">
+              <Sparkles className="inline w-4 h-4 mr-2" />
+              Mathematics Student Portfolio
             </span>
           </motion.div>
           <motion.h2 

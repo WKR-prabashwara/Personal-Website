@@ -1,5 +1,5 @@
 import React from 'react';
-import { Progress } from '../components/ui/progress';
+import { Sparkles } from 'lucide-react';
 
 const ExperienceSection = () => {
   const skills = [
@@ -34,8 +34,9 @@ const ExperienceSection = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
           <div className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20 inline-block">
-            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              ✨ Mathematics Student Portfolio
+            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center">
+              <Sparkles className="inline w-4 h-4 mr-2" />
+              Mathematics Student Portfolio
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">

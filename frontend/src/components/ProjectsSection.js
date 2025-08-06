@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, Github, Calendar } from 'lucide-react';
+import { ExternalLink, Github, Calendar, Sparkles, Calculator, Microscope, Shield } from 'lucide-react';
 
 const ProjectsSection = () => {
   // Mock projects data
@@ -56,8 +56,9 @@ const ProjectsSection = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
           <div className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20 inline-block">
-            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              ✨ Mathematics Student Portfolio
+            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center">
+              <Sparkles className="inline w-4 h-4 mr-2" />
+              Mathematics Student Portfolio
             </span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -77,7 +78,7 @@ const ProjectsSection = () => {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="aspect-video bg-muted rounded-lg mb-6 flex items-center justify-center">
-                <div className="text-6xl opacity-30">📊</div>
+                <Calculator className="w-16 h-16 text-primary/40" />
               </div>
               
               <div className="space-y-4">
@@ -137,21 +138,21 @@ const ProjectsSection = () => {
             </h3>
             <div className="grid md:grid-cols-3 gap-6 mt-8">
               <div className="p-4">
-                <div className="text-4xl mb-4">🔢</div>
+                <Calculator className="w-12 h-12 text-primary mx-auto mb-4" />
                 <h4 className="font-semibold text-foreground mb-2">Pure Mathematics</h4>
                 <p className="text-sm text-muted-foreground">
                   Advanced mathematical theories and proofs
                 </p>
               </div>
               <div className="p-4">
-                <div className="text-4xl mb-4">🔬</div>
+                <Microscope className="w-12 h-12 text-primary mx-auto mb-4" />
                 <h4 className="font-semibold text-foreground mb-2">Applied Physics</h4>
                 <p className="text-sm text-muted-foreground">
                   Real-world applications of physical principles
                 </p>
               </div>
               <div className="p-4">
-                <div className="text-4xl mb-4">🔐</div>
+                <Shield className="w-12 h-12 text-primary mx-auto mb-4" />
                 <h4 className="font-semibold text-foreground mb-2">Cryptographic Systems</h4>
                 <p className="text-sm text-muted-foreground">
                   Secure communication and encryption methods
