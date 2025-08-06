@@ -1,27 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Home, User, BookOpen, Mail, Menu, X } from 'lucide-react';
 import analyticsService from '../services/analyticsService';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   const navRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 50;
-      setScrolled(isScrolled);
+      const sections = ['home', 'about', 'blog', 'contact'];
+      const currentSection = sections.find(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          return rect.top <= 150 && rect.bottom >= 150;
+        }
+        return false;
+      });
+      
+      if (currentSection && currentSection !== activeSection) {
+        setActiveSection(currentSection);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once to set initial state
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [activeSection]);
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       analyticsService.trackEvent('Navigation', 'section_click', sectionId);
+      setActiveSection(sectionId);
     }
     setIsMenuOpen(false);
   };
@@ -45,109 +58,99 @@ const Navigation = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleMobileNavClick = (sectionId) => {
-    scrollToSection(sectionId);
-    setIsMenuOpen(false);
-  };
-
   const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'experience', label: 'Experience' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'blog', label: 'Blog' },
-    { id: 'contact', label: 'Contact' }
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'about', label: 'About', icon: User },
+    { id: 'blog', label: 'Blog', icon: BookOpen },
+    { id: 'contact', label: 'Contact', icon: Mail }
   ];
 
   return (
-    <nav 
-      ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
-        scrolled 
-          ? 'bg-background/80 backdrop-blur-md border-purple-500/20' 
-          : 'bg-transparent border-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo - Make responsive and clickable to home */}
+    <>
+      {/* Desktop Navigation - Dock Style */}
+      <nav className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="bg-white/90 backdrop-blur-lg rounded-full px-8 py-3 shadow-lg border border-white/20">
+          <div className="flex items-center space-x-2">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeSection === item.id;
+              
+              return (
+                <button 
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 text-sm font-medium ${
+                    isActive 
+                      ? 'bg-green-500 text-white shadow-md' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </nav>
+
+      {/* Desktop Logo and Subscribe */}
+      <div className="hidden md:block fixed top-0 left-0 right-0 z-40">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
           <div 
-            className="text-foreground text-xl md:text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
+            className="text-foreground text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
             onClick={() => scrollToSection('home')}
           >
-            <span className="block sm:hidden">P.</span>
-            <span className="hidden sm:block">Prabashwara.</span>
+            Prabashwara.
           </div>
           
-          {/* Desktop Navigation - More minimalist dock-style */}
-          <div className="hidden md:flex items-center justify-center flex-1">
-            <div className="bg-background/10 backdrop-blur-md rounded-full px-6 py-2 border border-white/10">
-              <div className="flex items-center space-x-6">
-                {navItems.map((item) => (
-                  <button 
-                    key={item.id}
-                    onClick={() => scrollToSection(item.id)}
-                    className="relative text-muted-foreground hover:text-foreground transition-all duration-300 focus:outline-none focus:text-foreground group text-sm font-medium hover:-translate-y-0.5"
-                  >
-                    {item.label}
-                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          {/* Subscribe button - Fix shake issue with better animation */}
-          <div className="hidden md:flex items-center">
-            <button 
-              onClick={scrollToNewsletter}
-              className="relative bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background overflow-hidden group hover:scale-102"
-            >
-              <span className="relative z-10">Subscribe</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-4">
-            <button 
-              className="text-foreground focus:outline-none transform transition-transform duration-200 hover:scale-110"
-              onClick={toggleMobileMenu}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <div 
-          className={`md:hidden mt-4 pb-4 transition-all duration-300 ${
-            isMenuOpen ? 'block opacity-100 translate-y-0' : 'hidden opacity-0 -translate-y-4'
-          }`}
-        >
-          <div className="flex flex-col space-y-4">
-            {navItems.map((item) => (
-              <button 
-                key={item.id}
-                onClick={() => handleMobileNavClick(item.id)}
-                className="text-muted-foreground hover:text-foreground transition-all duration-300 text-left focus:outline-none focus:text-foreground hover:translate-x-2"
-              >
-                {item.label}
-              </button>
-            ))}
-            <button 
-              onClick={() => {
-                scrollToNewsletter();
-                setIsMenuOpen(false);
-              }}
-              className="bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 w-fit focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background"
-            >
-              Subscribe
-            </button>
-          </div>
+          {/* Subscribe button */}
+          <button 
+            onClick={scrollToNewsletter}
+            className="relative bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background overflow-hidden group hover:scale-105"
+          >
+            <span className="relative z-10">Subscribe</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </button>
         </div>
       </div>
-    </nav>
+
+      {/* Mobile Navigation - Icon Dock */}
+      <nav className="md:hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="bg-white/90 backdrop-blur-lg rounded-full px-6 py-3 shadow-lg border border-white/20">
+          <div className="flex items-center space-x-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeSection === item.id;
+              
+              return (
+                <button 
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${
+                    isActive 
+                      ? 'bg-green-500 text-white shadow-md' 
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                  title={item.label}
+                >
+                  <Icon className="w-5 h-5" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay (if needed for future extensions) */}
+      <div 
+        className={`md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300 ${
+          isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+      />
+    </>
   );
 };
 
