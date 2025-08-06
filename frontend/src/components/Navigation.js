@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X } from 'lucide-react';
 import { gsap } from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import analyticsService from '../services/analyticsService';
+
+// Register the plugin
+gsap.registerPlugin(ScrollToPlugin);
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
