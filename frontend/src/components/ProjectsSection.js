@@ -55,26 +55,17 @@ const ProjectsSection = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
+          <div className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20 inline-block">
+            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              ✨ Mathematics Student Portfolio
+            </span>
+          </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Projects & Research,
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl mx-auto">
             I didn't do any project or research, but I think to do. So add test parts.
           </p>
-        </div>
-
-        {/* Development Note */}
-        <div className="bg-card border border-border rounded-2xl p-8 mb-12">
-          <div className="text-center">
-            <h3 className="text-2xl font-semibold text-foreground mb-4">Note for Development</h3>
-            <div className="bg-muted/50 rounded-lg p-6">
-              <p className="text-muted-foreground">
-                This section is currently in development. While I haven't completed any major projects yet, 
-                I'm actively planning research in mathematics, physics, and cryptography. 
-                Check back soon for updates on my upcoming work!
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Planned Projects Grid */}

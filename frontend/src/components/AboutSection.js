@@ -32,6 +32,14 @@ const AboutSection = () => {
           viewport={{ once: true, amount: 0.3 }}
           className="text-center mb-16"
         >
+          <motion.div
+            variants={slideInFromTop}
+            className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20 inline-block"
+          >
+            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              ✨ Mathematics Student Portfolio
+            </span>
+          </motion.div>
           <motion.h2 
             variants={slideInFromTop}
             className="text-4xl md:text-5xl font-bold text-foreground mb-6"
@@ -83,7 +91,10 @@ const AboutSection = () => {
                 For me, becoming a better version of myself means constantly working and improving.
               </p>
               
-              <button className="bg-primary text-primary-foreground px-8 py-3 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105">
+              <button 
+                onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
+                className="bg-primary text-primary-foreground px-8 py-3 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105"
+              >
                 Contact me
               </button>
             </div>

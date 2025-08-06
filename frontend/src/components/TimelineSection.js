@@ -11,7 +11,7 @@ const TimelineSection = () => {
       year: "2010",
       title: "Started Primary Education",
       description: "Began formal education with focus on basic mathematics and sciences.",
-      image: "/api/placeholder/300/200",
+      // image: "/api/placeholder/300/200",
       tags: ["Education", "Foundation"],
       dateRange: "2010 - 2015"
     },
@@ -20,7 +20,7 @@ const TimelineSection = () => {
       year: "2012", 
       title: "Mathematics Excellence",
       description: "Achieved outstanding results in mathematics competitions at school level.",
-      image: "/api/placeholder/300/200", 
+      // image: "/api/placeholder/300/200", 
       tags: ["Achievement", "Mathematics"],
       dateRange: "2012"
     },
@@ -29,7 +29,7 @@ const TimelineSection = () => {
       year: "2013",
       title: "Science Stream Selection", 
       description: "Chose science stream focusing on mathematics, physics, and chemistry.",
-      image: "/api/placeholder/300/200",
+      // image: "/api/placeholder/300/200",
       tags: ["Education", "Career Path"], 
       dateRange: "2013"
     },
@@ -38,7 +38,7 @@ const TimelineSection = () => {
       year: "2016",
       title: "Advanced Level Entry",
       description: "Successfully entered Advanced Level studies with focus on mathematics and sciences.",
-      image: "/api/placeholder/300/200",
+      // image: "/api/placeholder/300/200",
       tags: ["Education", "Milestone"],
       dateRange: "2016 - Present"
     },
@@ -47,7 +47,7 @@ const TimelineSection = () => {
       year: "2017", 
       title: "Programming Discovery",
       description: "Discovered programming and computational mathematics. Started learning Python.",
-      image: "/api/placeholder/300/200",
+      // image: "/api/placeholder/300/200",
       tags: ["Technology", "Skill Development"],
       dateRange: "2017"
     },
@@ -56,7 +56,7 @@ const TimelineSection = () => {
       year: "2018",
       title: "Research Interests", 
       description: "Developed interests in cryptography, advanced mathematics, and theoretical physics.",
-      image: "/api/placeholder/300/200",
+      // image: "/api/placeholder/300/200",
       tags: ["Research", "Specialization"], 
       dateRange: "2018"
     }
@@ -86,6 +86,11 @@ const TimelineSection = () => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
+          <div className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20 inline-block">
+            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              ✨ Mathematics Student Portfolio
+            </span>
+          </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             On the way,
           </h2>
@@ -96,8 +101,8 @@ const TimelineSection = () => {
 
         {/* Timeline with Central Axis */}
         <div className="relative">
-          {/* Central Timeline Line */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-primary/80 to-primary"></div>
+          {/* Central Timeline Line - Made skinnier and theme-colored */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500/60 via-cyan-500/60 to-purple-500/60"></div>
 
           <div className="space-y-12">
             {visibleEvents.map((event, index) => (
@@ -115,7 +120,7 @@ const TimelineSection = () => {
                 {/* Timeline Card */}
                 <div className={`w-5/12 ${index % 2 === 0 ? 'mr-auto pr-8' : 'ml-auto pl-8'}`}>
                   <div className="bg-card border border-border rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                    {/* Card Image */}
+                    {/* Card Image
                     <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/20 dark:to-blue-900/20 flex items-center justify-center">
                       <div className="text-4xl opacity-30">
                         {event.tags.includes('Education') ? '📚' : 
@@ -123,7 +128,7 @@ const TimelineSection = () => {
                          event.tags.includes('Technology') ? '💻' :
                          event.tags.includes('Research') ? '🔬' : '📅'}
                       </div>
-                    </div>
+                    </div> */}
 
                     {/* Card Content */}
                     <div className="p-6">

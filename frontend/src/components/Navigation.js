@@ -21,6 +21,21 @@ const Navigation = () => {
     setIsMenuOpen(false);
   };
 
+  const scrollToNewsletter = () => {
+    // Scroll to the newsletter section in BlogSection
+    const newsletterSection = document.getElementById('newsletter-section');
+    if (newsletterSection) {
+      newsletterSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      // Fallback to blog section if newsletter not found
+      const blogSection = document.getElementById('blog');
+      if (blogSection) {
+        blogSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setIsMenuOpen(false);
+  };
+
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
@@ -37,22 +52,29 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="text-foreground text-xl font-bold">
-            Prabashwara
+            Prabashwara.
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <button 
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-300"
-              >
-                {item.label}
-              </button>
-            ))}
+          <div className="hidden md:flex items-center">
+            {/* Centered navigation links */}
+            <div className="flex items-center space-x-8">
+              {navItems.map((item) => (
+                <button 
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 focus:outline-none focus:text-foreground"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
             
-            <button className="bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105">
+            {/* Subscribe button */}
+            <button 
+              onClick={scrollToNewsletter}
+              className="ml-8 bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background"
+            >
               Subscribe
             </button>
           </div>
@@ -60,7 +82,7 @@ const Navigation = () => {
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
             <button 
-              className="text-foreground"
+              className="text-foreground focus:outline-none"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -76,12 +98,15 @@ const Navigation = () => {
                 <button 
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-left"
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-left focus:outline-none focus:text-foreground"
                 >
                   {item.label}
                 </button>
               ))}
-              <button className="bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 w-fit">
+              <button 
+                onClick={scrollToNewsletter}
+                className="bg-primary text-primary-foreground px-6 py-2 rounded-full hover:bg-primary/90 transition-all duration-300 w-fit focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background"
+              >
                 Subscribe
               </button>
             </div>

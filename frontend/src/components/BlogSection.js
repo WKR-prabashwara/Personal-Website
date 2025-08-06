@@ -146,6 +146,11 @@ const BlogSection = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
+          <div className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20 inline-block">
+            <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              ✨ Mathematics Student Portfolio
+            </span>
+          </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Read a Lot,
           </h2>
@@ -312,8 +317,8 @@ const BlogSection = () => {
           </div>
         )}
 
-        {/* Newsletter Subscription */}
-        <div className="bg-card border border-border rounded-2xl p-8 text-center">
+        {/* Newsletter Subscription - ID added for Subscribe button navigation */}
+        <div id="newsletter-section" className="bg-card border border-border rounded-2xl p-8 text-center">
           <h3 className="text-2xl font-semibold text-foreground mb-4">
             Get news about blog posts,
           </h3>

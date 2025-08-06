@@ -11,9 +11,10 @@ import TimelineSection from "./components/TimelineSection";
 import BlogSection from "./components/BlogSection";
 import ContactSection from "./components/ContactSection";
 import Footer from "./components/Footer";
+import MusicPlayer from "./components/MusicPlayer";
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Enable preloader
 
   const handlePreloaderComplete = () => {
     setLoading(false);
@@ -34,6 +35,7 @@ function App() {
             <BlogSection />
             <ContactSection />
             <Footer />
+            <MusicPlayer />
           </>
         )}
       </div>

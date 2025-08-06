@@ -86,7 +86,7 @@ const HeroSection = () => {
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 tracking-wider">
             <span className="text-white">Rivibibu</span>{' '}
             <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              Prabashwara
+              Prabashwara.
             </span>
           </h1>
         </motion.div>
@@ -106,7 +106,7 @@ const HeroSection = () => {
         >
           <button 
             onClick={() => document.getElementById('about').scrollIntoView({ behavior: 'smooth' })}
-            className="group bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-8 py-4 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
+            className="group bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-8 py-4 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-black"
           >
             <span className="flex items-center justify-center">
               Explore My Work
@@ -117,7 +117,7 @@ const HeroSection = () => {
           </button>
           <button 
             onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
-            className="bg-transparent text-white px-8 py-4 rounded-full border-2 border-white/30 hover:border-purple-400 hover:bg-white/5 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
+            className="bg-transparent text-white px-8 py-4 rounded-full border-2 border-white/30 hover:border-purple-400 hover:bg-white/5 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-black"
           >
             Get In Touch
           </button>
