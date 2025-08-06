@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Home, User, BookOpen, Mail, Menu, X } from 'lucide-react';
+import { Home, User, BookOpen, Mail } from 'lucide-react';
 import analyticsService from '../services/analyticsService';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
   const navRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
+      const isScrolled = window.scrollY > 50;
+      setScrolled(isScrolled);
+      
       const sections = ['home', 'about', 'blog', 'contact'];
       const currentSection = sections.find(section => {
         const element = document.getElementById(section);
@@ -54,10 +58,6 @@ const Navigation = () => {
     setIsMenuOpen(false);
   };
 
-  const toggleMobileMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   const navItems = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'about', label: 'About', icon: User },
@@ -67,91 +67,92 @@ const Navigation = () => {
 
   return (
     <>
-      {/* Desktop Navigation - Dock Style */}
-      <nav className="hidden md:block fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-black/80 backdrop-blur-lg rounded-full px-8 py-3 shadow-lg border border-purple-500/30">
-          <div className="flex items-center space-x-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeSection === item.id;
-              
-              return (
-                <button 
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`relative flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-300 text-sm font-medium ${
-                    isActive 
-                      ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-md' 
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </nav>
-
-      {/* Desktop Logo and Subscribe with Blur Effect */}
-      <div className="hidden md:block fixed top-0 left-0 right-0 z-40">
-        <div className="bg-black/60 backdrop-blur-md border-b border-purple-500/20 transition-all duration-300">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      {/* Header with integrated navigation */}
+      <nav 
+        ref={navRef}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled 
+            ? 'bg-black/80 backdrop-blur-lg border-b border-purple-500/30' 
+            : 'bg-black/60 backdrop-blur-md border-b border-purple-500/20'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 py-3">
+          <div className="flex items-center justify-between">
             {/* Logo */}
             <div 
-              className="text-white text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
+              className="text-white text-xl md:text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
               onClick={() => scrollToSection('home')}
             >
-              Prabashwara.
+              <span className="hidden sm:block">Prabashwara.</span>
+              <span className="block sm:hidden">P.</span>
+            </div>
+            
+            {/* Desktop Navigation - Smaller Dock */}
+            <div className="hidden md:flex items-center">
+              <div className="bg-black/80 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-500/30">
+                <div className="flex items-center space-x-1">
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activeSection === item.id;
+                    
+                    return (
+                      <button 
+                        key={item.id}
+                        onClick={() => scrollToSection(item.id)}
+                        className={`relative flex items-center space-x-2 px-3 py-1.5 rounded-full transition-all duration-300 text-sm font-medium ${
+                          isActive 
+                            ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm' 
+                            : 'text-gray-300 hover:text-white hover:bg-white/10'
+                        }`}
+                      >
+                        <Icon className="w-3.5 h-3.5" />
+                        <span className="text-xs">{item.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
             
             {/* Subscribe button */}
-            <button 
-              onClick={scrollToNewsletter}
-              className="relative bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-6 py-2 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black overflow-hidden group hover:scale-105"
-            >
-              <span className="relative z-10">Subscribe</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-700 to-cyan-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-          </div>
-        </div>
-      </div>
+            <div className="hidden md:flex items-center">
+              <button 
+                onClick={scrollToNewsletter}
+                className="relative bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-4 py-2 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black overflow-hidden group hover:scale-105 text-sm"
+              >
+                <span className="relative z-10">Subscribe</span>
+              </button>
+            </div>
 
-      {/* Mobile Navigation - Icon Dock */}
-      <nav className="md:hidden fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-black/80 backdrop-blur-lg rounded-full px-6 py-3 shadow-lg border border-purple-500/30">
-          <div className="flex items-center space-x-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeSection === item.id;
-              
-              return (
-                <button 
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 ${
-                    isActive 
-                      ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-md' 
-                      : 'text-gray-300 hover:text-white hover:bg-white/10'
-                  }`}
-                  title={item.label}
-                >
-                  <Icon className="w-5 h-5" />
-                </button>
-              );
-            })}
+            {/* Mobile Navigation - Icon Dock */}
+            <div className="md:hidden">
+              <div className="bg-black/80 backdrop-blur-sm rounded-full px-3 py-2 border border-purple-500/30">
+                <div className="flex items-center space-x-1">
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activeSection === item.id;
+                    
+                    return (
+                      <button 
+                        key={item.id}
+                        onClick={() => scrollToSection(item.id)}
+                        className={`relative flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
+                          isActive 
+                            ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm' 
+                            : 'text-gray-300 hover:text-white hover:bg-white/10'
+                        }`}
+                        title={item.label}
+                      >
+                        <Icon className="w-4 h-4" />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </nav>
-
-      {/* Mobile Menu Overlay (if needed for future extensions) */}
-      <div 
-        className={`md:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity duration-300 ${
-          isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-        onClick={() => setIsMenuOpen(false)}
-      />
     </>
   );
 };
