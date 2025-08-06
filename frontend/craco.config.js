@@ -6,6 +6,9 @@ const config = {
   disableHotReload: process.env.DISABLE_HOT_RELOAD === 'true',
 };
 
+// Set environment variable to suppress source-map warnings
+process.env.GENERATE_SOURCEMAP = 'false';
+
 module.exports = {
   webpack: {
     alias: {
@@ -13,43 +16,33 @@ module.exports = {
     },
     configure: (webpackConfig) => {
       
-      // Suppress MediaPipe source map warnings and errors
-      webpackConfig.stats = {
-        ...webpackConfig.stats,
-        warningsFilter: [
-          /Failed to parse source map/,
-          /Can't resolve 'source-map-url'/,
-          /@mediapipe/,
-        ]
-      };
-
       // Configure ignoreWarnings to suppress MediaPipe warnings
       webpackConfig.ignoreWarnings = [
         ...(webpackConfig.ignoreWarnings || []),
-        function (warning) {
-          return warning.message && (
-            warning.message.includes('@mediapipe/tasks-vision') ||
-            warning.message.includes('Failed to parse source map') ||
-            warning.message.includes('vision_bundle_mjs.js.map')
-          );
+        /Failed to parse source map/,
+        /Can't resolve 'source-map-url'/,
+        /@mediapipe\/tasks-vision/,
+        function (warning, compilation) {
+          if (warning.message && warning.message.includes('@mediapipe/tasks-vision')) {
+            return true;
+          }
+          if (warning.message && warning.message.includes('Failed to parse source map')) {
+            return true;
+          }
+          return false;
         },
-        /Failed to parse source map.*@mediapipe.*vision_bundle_mjs\.js\.map/,
-        /Failed to parse source map from.*@mediapipe.*tasks-vision/,
       ];
 
-      // Configure module rules to exclude MediaPipe from source-map-loader
+      // Find and modify source-map-loader rules
       webpackConfig.module.rules.forEach((rule) => {
-        if (rule.enforce === 'pre' && rule.use) {
-          rule.use.forEach((use) => {
-            if (use.loader && use.loader.includes('source-map-loader')) {
-              use.options = use.options || {};
-              use.options.filterSourceMappingUrl = (url, resourcePath) => {
-                // Skip source maps for MediaPipe modules
-                if (resourcePath && resourcePath.includes('@mediapipe/tasks-vision')) {
-                  return false;
-                }
-                return true;
-              };
+        if (rule.enforce === 'pre' && Array.isArray(rule.use)) {
+          rule.use.forEach((useItem) => {
+            if (typeof useItem === 'object' && useItem.loader && useItem.loader.includes('source-map-loader')) {
+              // Add exclude patterns
+              rule.exclude = [
+                ...(rule.exclude || []),
+                /node_modules\/@mediapipe/,
+              ];
             }
           });
         }
