@@ -6,27 +6,30 @@ const Preloader = ({ onComplete }) => {
 
   useEffect(() => {
     let progressValue = 0;
+    const totalDuration = 5000; // 5 seconds total
+    const intervalTime = 50; // Update every 50ms
+    const increment = 100 / (totalDuration / intervalTime); // Calculate increment for 5 seconds
     
     const interval = setInterval(() => {
-      progressValue += Math.random() * 8 + 2; // Faster increment
+      progressValue += increment;
       
       if (progressValue >= 100) {
         progressValue = 100;
         setProgress(100);
         clearInterval(interval);
         
-        // Quick exit
+        // Exit after reaching 100%
         setTimeout(() => {
           setIsExiting(true);
           setTimeout(() => {
             if (onComplete) onComplete();
-          }, 300);
-        }, 200);
+          }, 500);
+        }, 300);
         
       } else {
         setProgress(progressValue);
       }
-    }, 30); // Faster interval
+    }, intervalTime);
 
     return () => clearInterval(interval);
   }, [onComplete]);
