@@ -5,9 +5,9 @@ import { slideInFromLeft, slideInFromRight, slideInFromTop, scaleIn } from '../u
 
 const AboutSection = () => {
   return (
-    <section id="about" className="relative min-h-screen py-20">
+    <section id="about" className="relative min-h-screen py-20 bg-black">
       {/* Blurred Stars Background */}
-      <div className="absolute inset-0 bg-background">
+      <div className="absolute inset-0">
         {[...Array(150)].map((_, i) => (
           <div
             key={i}
