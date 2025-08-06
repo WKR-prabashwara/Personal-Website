@@ -687,6 +687,9 @@ async def join_admin(sid, data):
 # Include the router in the main app
 app.include_router(api_router)
 
+# Mount Socket.IO
+socket_app = socketio.ASGIApp(sio, other_asgi_app=app)
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -694,3 +697,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Export the socket app for use with uvicorn
+app = socket_app
