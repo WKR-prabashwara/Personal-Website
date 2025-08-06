@@ -34,9 +34,9 @@ const ProjectsSection = () => {
   ];
 
   return (
-    <section id="projects" className="relative min-h-screen py-20">
+    <section id="projects" className="relative min-h-screen py-20 bg-black">
       {/* Background */}
-      <div className="absolute inset-0 bg-background">
+      <div className="absolute inset-0">
         {[...Array(80)].map((_, i) => (
           <div
             key={i}
