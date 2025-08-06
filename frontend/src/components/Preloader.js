@@ -64,18 +64,23 @@ const Preloader = ({ onComplete }) => {
 
   useEffect(() => {
     let currentStage = 0;
+    let progressValue = 0;
     
     const interval = setInterval(() => {
-      setProgress(prev => {
-        const newProgress = prev + 1;
-        
-        // Update loading text based on progress
-        if (currentStage < loadingStages.length) {
-          const stage = loadingStages[currentStage];
-          if (newProgress >= stage.progress) {
-            setLoadingText(stage.text);
-            
-            // Animate text change
+      progressValue += Math.random() * 3 + 1; // Random increment for more natural loading
+      
+      if (progressValue > 100) progressValue = 100;
+      
+      setProgress(progressValue);
+      
+      // Update loading text based on progress
+      if (currentStage < loadingStages.length) {
+        const stage = loadingStages[currentStage];
+        if (progressValue >= stage.progress) {
+          setLoadingText(stage.text);
+          
+          // Animate text change
+          if (textRef.current) {
             gsap.fromTo(textRef.current, {
               y: 10,
               opacity: 0.7
@@ -85,21 +90,26 @@ const Preloader = ({ onComplete }) => {
               duration: 0.5,
               ease: "power2.out"
             });
-            
-            currentStage++;
           }
+          
+          currentStage++;
         }
-        
-        // Animate progress bar
+      }
+      
+      // Animate progress bar
+      if (progressBarRef.current) {
         gsap.to(progressBarRef.current, {
-          width: `${newProgress}%`,
+          width: `${progressValue}%`,
           duration: 0.3,
           ease: "power2.out"
         });
+      }
 
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          
+      if (progressValue >= 100) {
+        clearInterval(interval);
+        
+        // Short delay before exit
+        setTimeout(() => {
           // Exit animations
           const exitTl = gsap.timeline({
             onComplete: () => {
@@ -107,25 +117,26 @@ const Preloader = ({ onComplete }) => {
             }
           });
           
-          exitTl.to(blackHoleRef.current, {
-            scale: 1.2,
-            rotation: "+=180",
-            duration: 0.8,
-            ease: "power2.inOut"
-          })
-          .to(preloaderRef.current, {
-            opacity: 0,
-            scale: 1.1,
-            duration: 0.6,
-            ease: "power2.inOut"
-          }, "-=0.3");
-          
-          return 100;
-        }
-        
-        return newProgress;
-      });
-    }, 40);
+          if (blackHoleRef.current && preloaderRef.current) {
+            exitTl.to(blackHoleRef.current, {
+              scale: 1.2,
+              rotation: "+=180",
+              duration: 0.8,
+              ease: "power2.inOut"
+            })
+            .to(preloaderRef.current, {
+              opacity: 0,
+              scale: 1.1,
+              duration: 0.6,
+              ease: "power2.inOut"
+            }, "-=0.3");
+          } else {
+            // Fallback if refs are null
+            if (onComplete) onComplete();
+          }
+        }, 500);
+      }
+    }, 50); // Slightly slower interval
 
     return () => clearInterval(interval);
   }, [onComplete]);
