@@ -43,6 +43,7 @@
     "framer-motion": "^12.23.12",
     "geoip-lite": "^1.4.10",
     "gsap": "^3.13.0",
+    "gsap-trial": "^3.13.0",
     "input-otp": "^1.4.2",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.507.0",
