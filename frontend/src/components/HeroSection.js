@@ -77,13 +77,16 @@ const HeroSection = () => {
           transform: `translateY(${scrollProgress * 30}px) scale(${1 - scrollProgress * 0.1})`,
         }}
       >
-        {/* Welcome Badge */}
+        {/* Welcome Badge - Add proper icon */}
         <motion.div
           variants={slideInFromTop}
           className="mb-8 py-2 px-4 border border-purple-500/50 rounded-full backdrop-blur-sm bg-black/20"
         >
-          <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-            ✨ Mathematics Student Portfolio
+          <span className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-2">
+            <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1L13.5 2.5L16.17 5.33L10.5 11L15 15.5L20.67 9.83L23.5 12.5L22 14H22L21 13V15L15 21L9 15V9L15 3V1L9 7V9L15 15L21 9Z"/>
+            </svg>
+            Mathematics Student Portfolio
           </span>
         </motion.div>
 
