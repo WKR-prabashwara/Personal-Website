@@ -70,21 +70,21 @@ const ProjectsSection = () => {
         </div>
 
         {/* Planned Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {projects.map((project, index) => (
             <div
               key={project.id}
-              className="bg-card border border-border rounded-2xl p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2"
+              className="bg-card border border-border rounded-2xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="aspect-video bg-muted rounded-lg mb-6 flex items-center justify-center">
-                <Calculator className="w-16 h-16 text-primary/40" />
+              <div className="aspect-video bg-muted rounded-lg mb-4 sm:mb-6 flex items-center justify-center">
+                <Calculator className="w-12 h-12 sm:w-16 sm:h-16 text-primary/40" />
               </div>
               
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-semibold text-foreground">{project.title}</h3>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+              <div className="space-y-3 sm:space-y-4">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="text-lg sm:text-xl font-semibold text-foreground leading-tight">{project.title}</h3>
+                  <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium flex-shrink-0 ${
                     project.status === 'planned' 
                       ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
                       : project.status === 'development'
@@ -100,7 +100,7 @@ const ProjectsSection = () => {
                 </p>
                 
                 <div className="flex items-center text-sm text-muted-foreground">
-                  <Calendar className="w-4 h-4 mr-2" />
+                  <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
                   {project.date}
                 </div>
                 
@@ -115,12 +115,12 @@ const ProjectsSection = () => {
                   ))}
                 </div>
                 
-                <div className="flex gap-2 pt-4">
-                  <button className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                <div className="flex flex-col sm:flex-row gap-2 pt-2 sm:pt-4">
+                  <button className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm">
                     <ExternalLink className="w-4 h-4" />
                     View Details
                   </button>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-secondary text-foreground rounded-lg hover:bg-secondary/80 transition-colors text-sm">
+                  <button className="flex items-center justify-center gap-2 px-4 py-2 bg-secondary text-foreground rounded-lg hover:bg-secondary/80 transition-colors text-sm">
                     <Github className="w-4 h-4" />
                     Code
                   </button>
