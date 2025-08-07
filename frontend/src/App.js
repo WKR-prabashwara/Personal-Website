@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { HelmetProvider, Helmet } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from 'react-error-boundary';
 import "./App.css";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -13,6 +13,7 @@ import ProjectsSection from "./components/ProjectsSection";
 import TimelineSection from "./components/TimelineSection";
 import Footer from "./components/Footer";
 import MusicPlayer from "./components/MusicPlayer";
+import SEOHead from "./components/SEOHead";
 import analyticsService from "./services/analyticsService";
 
 // Lazy load heavy components
@@ -37,7 +38,7 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => (
   </div>
 );
 
-// Loading Component
+// Loading Component with better performance
 const LoadingSpinner = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
     <div className="text-center">
@@ -59,50 +60,9 @@ const AnalyticsWrapper = ({ children }) => {
   return children;
 };
 
-// SEO Component
-const SEOHead = () => (
-  <Helmet>
-    <title>Rivibibu Prabashwara - Mathematics Student Portfolio</title>
-    <meta name="description" content="Exploring the cosmos through science, mathematics, and imagination. Advanced level science student specializing in mathematics, physics, programming, and cryptography." />
-    <meta name="keywords" content="mathematics, physics, programming, cryptography, student portfolio, science, Rivibibu Prabashwara" />
-    <meta name="author" content="Rivibibu Prabashwara" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    {/* Open Graph / Facebook */}
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://rivibibu-portfolio.com/" />
-    <meta property="og:title" content="Rivibibu Prabashwara - Mathematics Student Portfolio" />
-    <meta property="og:description" content="Exploring the cosmos through science, mathematics, and imagination." />
-    <meta property="og:image" content="/og-image.jpg" />
-
-    {/* Twitter */}
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://rivibibu-portfolio.com/" />
-    <meta property="twitter:title" content="Rivibibu Prabashwara - Mathematics Student Portfolio" />
-    <meta property="twitter:description" content="Exploring the cosmos through science, mathematics, and imagination." />
-    <meta property="twitter:image" content="/og-image.jpg" />
-    
-    {/* Structured Data */}
-    <script type="application/ld+json">
-      {JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Rivibibu Prabashwara",
-        "jobTitle": "Mathematics Student",
-        "description": "Advanced level science student specializing in mathematics, physics, programming, and cryptography",
-        "url": "https://rivibibu-portfolio.com",
-        "sameAs": [
-          "https://github.com/rivibibu",
-          "https://linkedin.com/in/rivibibu"
-        ]
-      })}
-    </script>
-  </Helmet>
-);
-
 // Main Portfolio Component
 const Portfolio = () => {
-  const [loading, setLoading] = useState(false); // Disabled preloader for performance
+  const [loading, setLoading] = useState(false); // Disabled preloader for better performance
 
   const handlePreloaderComplete = () => {
     setLoading(false);
@@ -113,6 +73,7 @@ const Portfolio = () => {
   return (
     <div className="App">
       <SEOHead />
+      
       {/* Skip to main content for accessibility */}
       <a 
         href="#main" 
