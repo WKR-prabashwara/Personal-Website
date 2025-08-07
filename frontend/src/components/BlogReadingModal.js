@@ -4,26 +4,32 @@ import { X, Calendar, Clock, User } from 'lucide-react';
 const BlogReadingModal = ({ post, isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
-      // Prevent background scrolling completely
-      const originalStyle = window.getComputedStyle(document.body);
-      const originalOverflow = originalStyle.overflow;
-      const originalPosition = originalStyle.position;
-      const originalTop = originalStyle.top;
+      // Store current scroll position before opening modal
       const scrollY = window.scrollY;
       
-      // Lock the background
+      // Prevent background scrolling completely
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.overflow = 'hidden';
       document.body.style.width = '100%';
       
+      // Store the original scroll position for restoration
+      document.body.setAttribute('data-scroll-y', scrollY.toString());
+      
       return () => {
+        // Get the stored scroll position
+        const storedScrollY = document.body.getAttribute('data-scroll-y');
+        const originalScrollY = storedScrollY ? parseInt(storedScrollY) : 0;
+        
         // Restore background scrolling
-        document.body.style.position = originalPosition;
-        document.body.style.top = originalTop;
-        document.body.style.overflow = originalOverflow;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.overflow = '';
         document.body.style.width = '';
-        window.scrollTo(0, scrollY);
+        document.body.removeAttribute('data-scroll-y');
+        
+        // Restore to the exact position where modal was opened
+        window.scrollTo(0, originalScrollY);
       };
     }
   }, [isOpen]);
