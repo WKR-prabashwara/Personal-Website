@@ -67,7 +67,7 @@ const Navigation = () => {
 
   return (
     <>
-      {/* Header with integrated navigation */}
+      {/* Header with integrated navigation - Fixed positioning for all screen sizes */}
       <nav 
         ref={navRef}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -75,19 +75,20 @@ const Navigation = () => {
             ? 'bg-black/80 backdrop-blur-lg border-b border-purple-500/30' 
             : 'bg-black/60 backdrop-blur-md border-b border-purple-500/20'
         }`}
+        style={{ position: 'fixed' }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between">
-            {/* Logo - Enhanced responsive design */}
+            {/* Logo - Updated mobile version to "Pr." */}
             <div 
               className="text-white text-lg sm:text-xl md:text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
               onClick={() => scrollToSection('home')}
             >
               <span className="hidden sm:block">Prabashwara.</span>
-              <span className="block sm:hidden">P.</span>
+              <span className="block sm:hidden">Pr.</span>
             </div>
             
-            {/* Desktop Navigation - Enhanced responsive dock */}
+            {/* Desktop Navigation - Enhanced responsive dock with bigger fonts */}
             <div className="hidden md:flex items-center">
               <div className="bg-black/80 backdrop-blur-sm rounded-full px-3 lg:px-4 py-2 border border-purple-500/30 shadow-lg">
                 <div className="flex items-center space-x-0.5 lg:space-x-1">
@@ -99,13 +100,13 @@ const Navigation = () => {
                       <button 
                         key={item.id}
                         onClick={() => scrollToSection(item.id)}
-                        className={`relative flex items-center space-x-1.5 lg:space-x-2 px-2.5 lg:px-3 py-1.5 rounded-full transition-all duration-300 text-xs lg:text-sm font-medium ${
+                        className={`relative flex items-center space-x-1.5 lg:space-x-2 px-2.5 lg:px-3 py-1.5 rounded-full transition-all duration-300 text-sm lg:text-base font-medium ${
                           isActive 
                             ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm scale-105' 
                             : 'text-gray-300 hover:text-white hover:bg-white/10 hover:scale-105'
                         }`}
                       >
-                        <Icon className="w-3 h-3 lg:w-3.5 lg:h-3.5 flex-shrink-0" />
+                        <Icon className="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" />
                         <span className="whitespace-nowrap">{item.label}</span>
                       </button>
                     );
@@ -114,11 +115,11 @@ const Navigation = () => {
               </div>
             </div>
             
-            {/* Subscribe button - Enhanced responsive */}
+            {/* Subscribe button - Enhanced responsive with bigger fonts */}
             <div className="hidden md:flex items-center">
               <button 
                 onClick={scrollToNewsletter}
-                className="relative bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-3 lg:px-4 py-2 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black overflow-hidden group hover:scale-105 text-xs lg:text-sm font-medium shadow-lg"
+                className="relative bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-3 lg:px-4 py-2 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black overflow-hidden group hover:scale-105 text-sm lg:text-base font-medium shadow-lg"
               >
                 <span className="relative z-10 whitespace-nowrap">Subscribe</span>
               </button>

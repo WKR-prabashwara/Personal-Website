@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import { Volume2, VolumeX } from 'lucide-react';
 
 const MusicPlayer = () => {
   const [isMuted, setIsMuted] = useState(false);
@@ -132,7 +132,7 @@ const MusicPlayer = () => {
         {/* Fallback: No audio available */}
       </audio>
 
-      {/* Music Player UI - Enhanced responsive design */}
+      {/* Music Player UI - Simplified with only mute button and wave */}
       <div className="fixed bottom-4 sm:bottom-6 left-4 sm:left-6 z-50 flex items-center gap-2 sm:gap-3">
         {/* Waving Bars - Clickable to control audio */}
         <button
@@ -143,7 +143,7 @@ const MusicPlayer = () => {
           <WavingBars isActive={isPlaying && !isMuted} />
         </button>
 
-        {/* Mute/Unmute Button - Speaker Icon */}
+        {/* Mute/Unmute Button - Speaker Icon Only */}
         <button
           onClick={toggleMute}
           className="w-10 h-10 sm:w-12 sm:h-12 bg-black/80 backdrop-blur-sm border border-purple-500/30 rounded-full flex items-center justify-center hover:bg-purple-600/20 transition-all duration-300 transform hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-black"
@@ -155,21 +155,6 @@ const MusicPlayer = () => {
             <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:text-purple-300 transition-colors" />
           )}
         </button>
-
-        {/* Play/Pause Button */}
-        {hasUserInteracted && (
-          <button
-            onClick={handleStart}
-            className="w-10 h-10 sm:w-12 sm:h-12 bg-black/80 backdrop-blur-sm border border-purple-500/30 rounded-full flex items-center justify-center hover:bg-purple-600/20 transition-all duration-300 transform hover:scale-105 group focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-black"
-            title={isPlaying ? 'Pause Music' : 'Play Music'}
-          >
-            {isPlaying ? (
-              <Pause className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:text-cyan-300 transition-colors" />
-            ) : (
-              <Play className="w-4 h-4 sm:w-5 sm:h-5 text-white group-hover:text-cyan-300 transition-colors ml-0.5" />
-            )}
-          </button>
-        )}
       </div>
     </>
   );
