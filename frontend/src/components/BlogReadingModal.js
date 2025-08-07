@@ -4,30 +4,45 @@ import { X, Calendar, Clock, User } from 'lucide-react';
 const BlogReadingModal = ({ post, isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
+      // Prevent background scrolling completely
+      const originalStyle = window.getComputedStyle(document.body);
+      const originalOverflow = originalStyle.overflow;
+      const originalPosition = originalStyle.position;
+      const originalTop = originalStyle.top;
+      const scrollY = window.scrollY;
+      
+      // Lock the background
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.width = '100%';
+      
+      return () => {
+        // Restore background scrolling
+        document.body.style.position = originalPosition;
+        document.body.style.top = originalTop;
+        document.body.style.overflow = originalOverflow;
+        document.body.style.width = '';
+        window.scrollTo(0, scrollY);
+      };
     }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
 
   if (!isOpen || !post) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {/* Backdrop - Fixed background */}
       <div 
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
         onClick={onClose}
+        style={{ position: 'fixed' }}
       />
       
-      {/* Modal */}
-      <div className="relative bg-card border border-border rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+      {/* Modal - Proper positioning */}
+      <div className="relative bg-card border border-border rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl z-10">
         {/* Header */}
-        <div className="sticky top-0 bg-card/90 backdrop-blur-sm border-b border-border p-6 flex items-center justify-between">
+        <div className="sticky top-0 bg-card/90 backdrop-blur-sm border-b border-border p-6 flex items-center justify-between z-20">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-primary" />
@@ -46,8 +61,8 @@ const BlogReadingModal = ({ post, isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(90vh-100px)]">
+        {/* Content - Scrollable only within modal */}
+        <div className="overflow-y-auto max-h-[calc(90vh-100px)]" style={{ position: 'relative' }}>
           {/* Featured Image */}
           <div className="aspect-video bg-gradient-to-br from-purple-100 to-blue-100 dark:from-purple-900/20 dark:to-blue-900/20 flex items-center justify-center">
             <div className="text-6xl opacity-30">📝</div>

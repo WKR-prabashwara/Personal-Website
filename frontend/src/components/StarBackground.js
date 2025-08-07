@@ -28,8 +28,9 @@ const Stars = (props) => {
 
   useFrame((state, delta) => {
     if (ref.current) {
-      ref.current.rotation.x -= delta / 10;
-      ref.current.rotation.y -= delta / 15;
+      // Reduced rotation speed for smoother movement
+      ref.current.rotation.x -= delta / 20; // Reduced from /10 to /20
+      ref.current.rotation.y -= delta / 25; // Reduced from /15 to /25
     }
   });
 

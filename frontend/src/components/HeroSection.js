@@ -123,7 +123,7 @@ const HeroSection = () => {
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }
             }}
-            className="group bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-8 py-4 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-black"
+            className="group bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-8 py-4 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
           >
             <span className="flex items-center justify-center">
               Explore My Work
@@ -139,21 +139,21 @@ const HeroSection = () => {
                 element.scrollIntoView({ behavior: 'smooth', block: 'start' });
               }
             }}
-            className="bg-transparent text-white px-8 py-4 rounded-full border-2 border-white/30 hover:border-purple-400 hover:bg-white/5 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-black"
+            className="bg-transparent text-white px-8 py-4 rounded-full border-2 border-white/30 hover:border-purple-400 hover:bg-white/5 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
           >
             Get In Touch
           </button>
         </motion.div>
       </motion.div>
 
-      {/* Interactive Scroll Indicator - Improved positioning */}
+      {/* Interactive Scroll Indicator - Hidden on tablets and mobile */}
       <motion.div 
         variants={scaleIn(1.5)}
-        className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-30"
+        className="absolute bottom-6 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-30 hidden lg:block"
       >
         <button 
           onClick={handleScrollExplore}
-          className="flex flex-col items-center text-white/70 hover:text-white transition-colors duration-300 cursor-pointer group focus:outline-none"
+          className="flex flex-col items-center text-white/70 hover:text-white transition-colors duration-300 cursor-pointer group"
         >
           <p className="mb-2 text-xs sm:text-sm group-hover:text-purple-300 transition-colors whitespace-nowrap">Scroll to explore</p>
           <div className="w-px h-8 sm:h-12 bg-white/20 relative">
