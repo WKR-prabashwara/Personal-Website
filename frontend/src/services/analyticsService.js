@@ -14,6 +14,7 @@ class AnalyticsService {
     this.currentPage = '';
     this.pageStartTime = Date.now();
     this.devToolsOpen = false;
+    this.isInitialized = false;
     
     // Initialize Google Analytics if tracking ID is provided
     const GA_TRACKING_ID = process.env.REACT_APP_GA_TRACKING_ID;
@@ -37,6 +38,11 @@ class AnalyticsService {
   }
 
   async initializeSession() {
+    // Skip if already initialized
+    if (this.isInitialized) {
+      return;
+    }
+
     try {
       const sessionData = {
         visitor_id: this.visitorId,
@@ -44,31 +50,57 @@ class AnalyticsService {
         referrer: document.referrer || null
       };
 
-      const response = await axios.post(`${this.backendUrl}/api/analytics/session`, sessionData);
+      // Add timeout and better error handling
+      const response = await axios.post(
+        `${this.backendUrl}/api/analytics/session`, 
+        sessionData,
+        {
+          timeout: 5000, // 5 second timeout
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }
+      );
+      
       if (response.data.session_id) {
         this.sessionId = response.data.session_id;
+        this.isInitialized = true;
         this.connectSocket();
       }
     } catch (error) {
-      console.warn('Analytics session initialization failed:', error);
+      console.warn('Analytics session initialization failed:', error.message);
+      // Graceful degradation - continue without analytics
+      this.isInitialized = true;
     }
   }
 
   connectSocket() {
+    if (!this.backendUrl || this.socket) {
+      return;
+    }
+
     try {
       this.socket = io(this.backendUrl, {
-        transports: ['websocket', 'polling']
+        transports: ['websocket', 'polling'],
+        timeout: 5000,
+        reconnection: true,
+        reconnectionAttempts: 3,
+        reconnectionDelay: 1000
       });
       
       this.socket.on('connect', () => {
         console.log('Analytics socket connected');
       });
       
+      this.socket.on('connect_error', (error) => {
+        console.warn('Socket connection error:', error.message);
+      });
+      
       this.socket.on('disconnect', () => {
         console.log('Analytics socket disconnected');
       });
     } catch (error) {
-      console.warn('Socket connection failed:', error);
+      console.warn('Socket connection failed:', error.message);
     }
   }
 
@@ -93,7 +125,16 @@ class AnalyticsService {
           time_spent: 0
         };
 
-        await axios.post(`${this.backendUrl}/api/analytics/pageview`, pageData);
+        await axios.post(
+          `${this.backendUrl}/api/analytics/pageview`, 
+          pageData,
+          {
+            timeout: 5000,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
       }
 
       // Track with Google Analytics
@@ -101,23 +142,32 @@ class AnalyticsService {
         ReactGA.send('pageview', { page_path: pageUrl, page_title: pageTitle });
       }
     } catch (error) {
-      console.warn('Page view tracking failed:', error);
+      console.warn('Page view tracking failed:', error.message);
     }
   }
 
   async updatePageTime(pageUrl, timeSpent) {
     try {
       if (this.sessionId && timeSpent > 5) { // Only track if spent more than 5 seconds
-        await axios.post(`${this.backendUrl}/api/analytics/pageview`, {
-          visitor_id: this.visitorId,
-          session_id: this.sessionId,
-          page_url: pageUrl,
-          page_title: document.title,
-          time_spent: timeSpent
-        });
+        await axios.post(
+          `${this.backendUrl}/api/analytics/pageview`, 
+          {
+            visitor_id: this.visitorId,
+            session_id: this.sessionId,
+            page_url: pageUrl,
+            page_title: document.title,
+            time_spent: timeSpent
+          },
+          {
+            timeout: 5000,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
       }
     } catch (error) {
-      console.warn('Page time update failed:', error);
+      console.warn('Page time update failed:', error.message);
     }
   }
 
@@ -129,7 +179,7 @@ class AnalyticsService {
 
     const threshold = 160;
 
-    setInterval(() => {
+    const checkDevTools = () => {
       if (window.outerHeight - window.innerHeight > threshold || 
           window.outerWidth - window.innerWidth > threshold) {
         if (!devtools.open) {
@@ -139,21 +189,28 @@ class AnalyticsService {
       } else {
         devtools.open = false;
       }
-    }, 500);
+    };
 
-    // Additional detection method
-    let element = new Image();
-    Object.defineProperty(element, 'id', {
-      get: () => {
-        if (!this.devToolsOpen) {
-          this.devToolsOpen = true;
-          this.onDevToolsOpen();
+    // Check periodically but less frequently
+    setInterval(checkDevTools, 1000);
+
+    // Additional detection method with error handling
+    try {
+      let element = new Image();
+      Object.defineProperty(element, 'id', {
+        get: () => {
+          if (!this.devToolsOpen) {
+            this.devToolsOpen = true;
+            this.onDevToolsOpen();
+          }
         }
-      }
-    });
+      });
 
-    // Trigger the detection
-    console.log(element);
+      // Trigger the detection
+      console.log(element);
+    } catch (error) {
+      // Silent fail - dev tools detection is not critical
+    }
   }
 
   async onDevToolsOpen() {
@@ -166,7 +223,16 @@ class AnalyticsService {
           page_url: window.location.href
         };
 
-        await axios.post(`${this.backendUrl}/api/analytics/dev-tools-alert`, alertData);
+        await axios.post(
+          `${this.backendUrl}/api/analytics/dev-tools-alert`, 
+          alertData,
+          {
+            timeout: 5000,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
         
         // Track with Google Analytics as event
         if (ReactGA.isInitialized) {
@@ -178,7 +244,7 @@ class AnalyticsService {
         }
       }
     } catch (error) {
-      console.warn('Dev tools alert failed:', error);
+      console.warn('Dev tools alert failed:', error.message);
     }
   }
 
@@ -188,22 +254,28 @@ class AnalyticsService {
         const timeSpent = Math.floor((Date.now() - this.pageStartTime) / 1000);
         const totalSessionTime = Math.floor((Date.now() - this.sessionStart) / 1000);
         
-        // Send final tracking data
-        navigator.sendBeacon(
-          `${this.backendUrl}/api/analytics/session/${this.sessionId}/end?total_time=${totalSessionTime}`
-        );
-        
-        if (timeSpent > 5) {
+        // Send final tracking data using beacon for reliability
+        try {
           navigator.sendBeacon(
-            `${this.backendUrl}/api/analytics/pageview`,
-            JSON.stringify({
+            `${this.backendUrl}/api/analytics/session/${this.sessionId}/end?total_time=${totalSessionTime}`
+          );
+          
+          if (timeSpent > 5) {
+            const payload = JSON.stringify({
               visitor_id: this.visitorId,
               session_id: this.sessionId,
               page_url: this.currentPage,
               page_title: document.title,
               time_spent: timeSpent
-            })
-          );
+            });
+            
+            navigator.sendBeacon(
+              `${this.backendUrl}/api/analytics/pageview`,
+              payload
+            );
+          }
+        } catch (error) {
+          // Silent fail - beacon is not supported or failed
         }
       }
     });
@@ -242,8 +314,22 @@ class AnalyticsService {
       this.socket.on('dev_tools_alert', callback);
     }
   }
+
+  // Graceful cleanup
+  disconnect() {
+    if (this.socket) {
+      this.socket.disconnect();
+      this.socket = null;
+    }
+  }
 }
 
 // Create singleton instance
 const analyticsService = new AnalyticsService();
+
+// Handle cleanup on page unload
+window.addEventListener('beforeunload', () => {
+  analyticsService.disconnect();
+});
+
 export default analyticsService;

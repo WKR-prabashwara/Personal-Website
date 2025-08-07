@@ -31,7 +31,7 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create Socket.IO server
+# Create Socket.IO server with enhanced CORS support
 sio = socketio.AsyncServer(
     async_mode='asgi',
     cors_allowed_origins="*",
@@ -690,12 +690,14 @@ app.include_router(api_router)
 # Mount Socket.IO
 socket_app = socketio.ASGIApp(sio, other_asgi_app=app)
 
+# Enhanced CORS configuration
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=["*"],  # In production, specify exact origins
     allow_credentials=True,
-    allow_origins=["*"],
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Export the socket app for use with uvicorn
