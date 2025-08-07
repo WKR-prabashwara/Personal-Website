@@ -56,26 +56,16 @@ const HeroSection = () => {
       {/* Star Background */}
       <StarBackground />
       
-      {/* Black Hole Video Background - Improved positioning and responsiveness */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden z-[-1]">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto transform -translate-x-1/2 -translate-y-1/2 scale-125 rotate-180 object-cover"
-          style={{
-            filter: 'brightness(0.7) contrast(1.2)',
-          }}
-        >
-          <source src="/blackhole.webm" type="video/webm" />
-          {/* Fallback for browsers that don't support the video */}
-          <div className="absolute inset-0 bg-gradient-radial from-purple-900/30 via-black to-black"></div>
-        </video>
-        
-        {/* Gradient overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50"></div>
-      </div>
+      {/* Black Hole Video - Original positioning restored */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="rotate-180 absolute top-[-280px] h-full w-full left-0 z-[-10] object-cover"
+      >
+        <source src="/blackhole.webm" type="video/webm" />
+      </video>
       
       {/* Content Overlay - Better positioned and responsive */}
       <motion.div 
