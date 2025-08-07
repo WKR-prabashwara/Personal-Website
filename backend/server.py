@@ -551,7 +551,7 @@ async def get_contact():
     await db.contact.insert_one(contact_obj.dict())
     return contact_obj
 
-@api_router.put("/contact", response_model=ContactInfo)
+@api_router.put("/contact/info", response_model=ContactInfo)
 async def update_contact(contact_update: ContactInfoUpdate, current_user: str = Depends(verify_token)):
     existing_contact = await db.contact.find_one()
     if existing_contact:
