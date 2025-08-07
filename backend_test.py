@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 
 class PortfolioAPITester:
-    def __init__(self, base_url="https://3f82e045-34ee-494b-8c52-5d523a617854.preview.emergentagent.com"):
+    def __init__(self, base_url="https://38643191-33c8-4f3f-aea8-4c8278098a5e.preview.emergentagent.com"):
         self.base_url = base_url
         self.token = None
         self.tests_run = 0
