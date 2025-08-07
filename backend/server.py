@@ -474,8 +474,64 @@ async def delete_blog_post(post_id: str, current_user: str = Depends(verify_toke
         raise HTTPException(status_code=404, detail="Blog post not found")
     return {"message": "Blog post deleted successfully"}
 
+# Contact Form Submission Model
+class ContactFormSubmission(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    email: EmailStr
+    message: str
+    ip_address: Optional[str] = None
+    user_agent: Optional[str] = None
+    submitted_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ContactFormCreate(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    email: EmailStr
+    message: str = Field(..., min_length=10, max_length=1000)
+
+# Contact Form Submission Endpoint
+@api_router.post("/contact")
+async def submit_contact_form(form_data: ContactFormCreate, request: Request):
+    """Handle contact form submissions"""
+    try:
+        # Get client information
+        client_ip = request.client.host
+        forwarded_for = request.headers.get('x-forwarded-for')
+        if forwarded_for:
+            client_ip = forwarded_for.split(',')[0].strip()
+        
+        user_agent = request.headers.get('user-agent', '')
+        
+        # Create submission object
+        submission_dict = form_data.dict()
+        submission_dict.update({
+            'ip_address': client_ip,
+            'user_agent': user_agent
+        })
+        
+        submission_obj = ContactFormSubmission(**submission_dict)
+        await db.contact_submissions.insert_one(submission_obj.dict())
+        
+        logger.info(f"Contact form submitted by {form_data.name} ({form_data.email})")
+        
+        return {"status": "success", "message": "Your message has been sent successfully!"}
+    
+    except Exception as e:
+        logger.error(f"Error submitting contact form: {e}")
+        raise HTTPException(status_code=500, detail="Failed to submit contact form")
+
+@api_router.get("/contact/submissions", response_model=List[ContactFormSubmission])
+async def get_contact_submissions(current_user: str = Depends(verify_token), limit: int = 50):
+    """Get contact form submissions (admin only)"""
+    try:
+        submissions = await db.contact_submissions.find().sort("submitted_at", -1).limit(limit).to_list(limit)
+        return [ContactFormSubmission(**submission) for submission in submissions]
+    except Exception as e:
+        logger.error(f"Error getting contact submissions: {e}")
+        raise HTTPException(status_code=500, detail="Failed to get submissions")
+
 # Contact Info Management
-@api_router.get("/contact", response_model=ContactInfo)
+@api_router.get("/contact/info", response_model=ContactInfo)
 async def get_contact():
     contact = await db.contact.find_one()
     if contact:
