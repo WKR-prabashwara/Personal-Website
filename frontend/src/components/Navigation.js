@@ -33,13 +33,45 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [activeSection]);
 
+  // Unified scroll function with better error handling and accessibility
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!element) {
+      console.error(`Section with id '${sectionId}' not found`);
+      return;
+    }
+    
+    try {
+      element.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start',
+        inline: 'nearest'
+      });
+      
       analyticsService.trackEvent('Navigation', 'section_click', sectionId);
       setActiveSection(sectionId);
+      
+      // Announce navigation for screen readers
+      const announcement = `Navigating to ${sectionId} section`;
+      const srAnnouncement = document.createElement('div');
+      srAnnouncement.setAttribute('aria-live', 'polite');
+      srAnnouncement.setAttribute('aria-atomic', 'true');
+      srAnnouncement.className = 'sr-only';
+      srAnnouncement.textContent = announcement;
+      document.body.appendChild(srAnnouncement);
+      setTimeout(() => document.body.removeChild(srAnnouncement), 1000);
+      
+    } catch (error) {
+      console.error('Navigation scroll error:', error);
+      // Fallback scroll method
+      const rect = element.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      window.scrollTo({
+        top: rect.top + scrollTop,
+        behavior: 'smooth'
+      });
     }
+    
     setIsMenuOpen(false);
   };
 
@@ -58,6 +90,14 @@ const Navigation = () => {
     setIsMenuOpen(false);
   };
 
+  // Keyboard navigation handler
+  const handleKeyPress = (event, action) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      action();
+    }
+  };
+
   const navItems = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'about', label: 'About', icon: User },
@@ -67,7 +107,7 @@ const Navigation = () => {
 
   return (
     <>
-      {/* Header with integrated navigation - Fixed positioning for all screen sizes */}
+      {/* Header with integrated navigation */}
       <nav 
         ref={navRef}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -75,81 +115,101 @@ const Navigation = () => {
             ? 'bg-black/80 backdrop-blur-lg border-b border-purple-500/30' 
             : 'bg-black/60 backdrop-blur-md border-b border-purple-500/20'
         }`}
-        style={{ position: 'fixed' }}
+        role="navigation"
+        aria-label="Main navigation"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between">
-            {/* Logo - Updated mobile version to "Pr." */}
-            <div 
-              className="text-white text-lg sm:text-xl md:text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300"
+            {/* Logo */}
+            <button
+              className="text-white text-lg sm:text-xl md:text-2xl font-bold cursor-pointer transform hover:scale-105 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-black rounded-lg p-1"
               onClick={() => scrollToSection('home')}
+              onKeyPress={(e) => handleKeyPress(e, () => scrollToSection('home'))}
+              aria-label="Go to home section - Rivibibu Prabashwara"
+              type="button"
             >
               <span className="hidden sm:block">Prabashwara.</span>
               <span className="block sm:hidden">Pr.</span>
-            </div>
+            </button>
             
-            {/* Desktop Navigation - Enhanced responsive dock with bigger fonts */}
+            {/* Desktop Navigation - Enhanced accessibility */}
             <div className="hidden md:flex items-center">
-              <div className="bg-black/80 backdrop-blur-sm rounded-full px-3 lg:px-4 py-2 border border-purple-500/30 shadow-lg">
-                <div className="flex items-center space-x-0.5 lg:space-x-1">
+              <nav className="bg-black/80 backdrop-blur-sm rounded-full px-3 lg:px-4 py-2 border border-purple-500/30 shadow-lg">
+                <ul className="flex items-center space-x-0.5 lg:space-x-1" role="list">
                   {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = activeSection === item.id;
                     
                     return (
-                      <button 
-                        key={item.id}
-                        onClick={() => scrollToSection(item.id)}
-                        className={`relative flex items-center space-x-1.5 lg:space-x-2 px-2.5 lg:px-3 py-1.5 rounded-full transition-all duration-300 text-sm lg:text-base font-medium ${
-                          isActive 
-                            ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm scale-105' 
-                            : 'text-gray-300 hover:text-white hover:bg-white/10 hover:scale-105'
-                        }`}
-                      >
-                        <Icon className="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" />
-                        <span className="whitespace-nowrap">{item.label}</span>
-                      </button>
+                      <li key={item.id} role="listitem">
+                        <button 
+                          onClick={() => scrollToSection(item.id)}
+                          onKeyPress={(e) => handleKeyPress(e, () => scrollToSection(item.id))}
+                          className={`relative flex items-center space-x-1.5 lg:space-x-2 px-2.5 lg:px-3 py-1.5 rounded-full transition-all duration-300 text-sm lg:text-base font-medium focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-black ${
+                            isActive 
+                              ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm scale-105' 
+                              : 'text-gray-300 hover:text-white hover:bg-white/10 hover:scale-105'
+                          }`}
+                          aria-current={isActive ? 'page' : undefined}
+                          aria-label={`Navigate to ${item.label} section`}
+                          type="button"
+                        >
+                          <Icon className="w-3 h-3 lg:w-4 lg:h-4 flex-shrink-0" aria-hidden="true" />
+                          <span className="whitespace-nowrap">{item.label}</span>
+                        </button>
+                      </li>
                     );
                   })}
-                </div>
-              </div>
+                </ul>
+              </nav>
             </div>
             
-            {/* Subscribe button - Enhanced responsive with bigger fonts */}
+            {/* Subscribe button */}
             <div className="hidden md:flex items-center">
               <button 
                 onClick={scrollToNewsletter}
+                onKeyPress={(e) => handleKeyPress(e, scrollToNewsletter)}
                 className="relative bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-3 lg:px-4 py-2 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black overflow-hidden group hover:scale-105 text-sm lg:text-base font-medium shadow-lg"
+                aria-label="Subscribe to blog updates"
+                type="button"
               >
                 <span className="relative z-10 whitespace-nowrap">Subscribe</span>
               </button>
             </div>
 
-            {/* Mobile Navigation - Enhanced icon dock */}
+            {/* Mobile Navigation */}
             <div className="md:hidden">
-              <div className="bg-black/80 backdrop-blur-sm rounded-full px-2.5 py-2 border border-purple-500/30 shadow-lg">
-                <div className="flex items-center space-x-0.5">
+              <nav 
+                className="bg-black/80 backdrop-blur-sm rounded-full px-2.5 py-2 border border-purple-500/30 shadow-lg"
+                aria-label="Mobile navigation"
+              >
+                <ul className="flex items-center space-x-0.5" role="list">
                   {navItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = activeSection === item.id;
                     
                     return (
-                      <button 
-                        key={item.id}
-                        onClick={() => scrollToSection(item.id)}
-                        className={`relative flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ${
-                          isActive 
-                            ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm scale-110' 
-                            : 'text-gray-300 hover:text-white hover:bg-white/10 hover:scale-110'
-                        }`}
-                        title={item.label}
-                      >
-                        <Icon className="w-3.5 h-3.5" />
-                      </button>
+                      <li key={item.id} role="listitem">
+                        <button 
+                          onClick={() => scrollToSection(item.id)}
+                          onKeyPress={(e) => handleKeyPress(e, () => scrollToSection(item.id))}
+                          className={`relative flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:ring-offset-2 focus:ring-offset-black ${
+                            isActive 
+                              ? 'bg-gradient-to-r from-purple-600 to-cyan-600 text-white shadow-sm scale-110' 
+                              : 'text-gray-300 hover:text-white hover:bg-white/10 hover:scale-110'
+                          }`}
+                          aria-current={isActive ? 'page' : undefined}
+                          aria-label={`Navigate to ${item.label} section`}
+                          title={item.label}
+                          type="button"
+                        >
+                          <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+                        </button>
+                      </li>
                     );
                   })}
-                </div>
-              </div>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>

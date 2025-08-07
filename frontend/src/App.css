@@ -78,11 +78,13 @@ button, input, textarea, select {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Remove button click borders while preserving functionality */
+/* Accessibility improvements for focus states */
 button:focus,
-button:active {
+button:active,
+a:focus,
+a:active {
   outline: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.5) !important;
 }
 
 input:focus,
@@ -92,11 +94,37 @@ textarea:active,
 select:focus,
 select:active {
   outline: none !important;
+  border-color: rgba(147, 51, 234, 0.7) !important;
+  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2) !important;
 }
 
 /* Restore button cursor and basic functionality */
 button {
   cursor: pointer;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }
 
 /* Custom scrollbar */
@@ -251,13 +279,13 @@ button {
   font-size: clamp(2rem, 8vw, 4rem);
 }
 
-/* Enhanced button styles */
+/* Enhanced button styles - Fixed from inline styles */
 .btn-primary {
-  @apply bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-6 py-3 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25;
+  @apply bg-gradient-to-r from-purple-600 to-cyan-600 text-white rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25;
 }
 
 .btn-secondary {
-  @apply bg-transparent text-white px-6 py-3 rounded-full border-2 border-white/30 hover:border-purple-400 hover:bg-white/5 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm;
+  @apply bg-transparent text-white rounded-full border-2 border-white/30 hover:border-purple-400 hover:bg-white/5 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm;
 }
 
 /* Loading states */
@@ -340,4 +368,27 @@ button {
   textarea {
     font-size: 16px;
   }
+}
+
+/* Focus improvements for better accessibility */
+*:focus-visible {
+  outline: 2px solid rgba(147, 51, 234, 0.8);
+  outline-offset: 2px;
+}
+
+/* Skip link styles */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: rgba(147, 51, 234, 0.9);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 6px;
 }
