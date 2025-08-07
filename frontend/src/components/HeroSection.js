@@ -111,10 +111,10 @@ const HeroSection = () => {
           Exploring the cosmos through science, mathematics, and imagination
         </motion.p>
 
-        {/* Action Buttons - Improved responsive layout */}
+        {/* Action Buttons */}
         <motion.div 
           variants={slideInFromLeft(1)}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto"
+          className="flex flex-col sm:flex-row gap-4"
         >
           <button 
             onClick={() => {
