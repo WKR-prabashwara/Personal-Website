@@ -39,6 +39,39 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Enhanced scroll functions with debugging and fallback
+  const handleExploreWork = () => {
+    console.log('Explore button clicked'); // Debug log
+    const element = document.getElementById('about');
+    if (element) {
+      console.log('About element found, scrolling...'); // Debug log
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // Fallback scroll method if smooth scroll fails
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'auto', block: 'start' });
+      }, 100);
+    } else {
+      console.error('About element not found'); // Debug log
+    }
+  };
+
+  const handleGetInTouch = () => {
+    console.log('Get in touch button clicked'); // Debug log
+    const element = document.getElementById('contact');
+    if (element) {
+      console.log('Contact element found, scrolling...'); // Debug log
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // Fallback scroll method if smooth scroll fails
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'auto', block: 'start' });
+      }, 100);
+    } else {
+      console.error('Contact element not found'); // Debug log
+    }
+  };
+
   // Interactive scroll to explore function
   const handleScrollExplore = () => {
     const nextSection = document.getElementById('about');
@@ -111,35 +144,70 @@ const HeroSection = () => {
           Exploring the cosmos through science, mathematics, and imagination
         </motion.p>
 
-        {/* Action Buttons */}
+        {/* Action Buttons - Enhanced with inline styles for guaranteed functionality */}
         <motion.div 
           variants={slideInFromLeft(1)}
           className="flex flex-col sm:flex-row gap-4"
         >
           <button 
-            onClick={() => {
-              const element = document.getElementById('about');
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
+            onClick={handleExploreWork}
+            style={{
+              cursor: 'pointer',
+              border: 'none',
+              padding: '1rem 2rem',
+              borderRadius: '9999px',
+              background: 'linear-gradient(to right, #9333ea, #0891b2)',
+              color: 'white',
+              fontSize: '1rem',
+              fontWeight: '500',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
             }}
-            className="group bg-gradient-to-r from-purple-600 to-cyan-600 text-white px-8 py-4 rounded-full hover:from-purple-700 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
+            className="group hover:from-purple-700 hover:to-cyan-700 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25"
+            onMouseEnter={(e) => {
+              e.target.style.background = 'linear-gradient(to right, #7c2d12, #0e7490)';
+              e.target.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'linear-gradient(to right, #9333ea, #0891b2)';
+              e.target.style.transform = 'scale(1)';
+            }}
           >
-            <span className="flex items-center justify-center">
-              Explore My Work
-              <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </span>
+            <span>Explore My Work</span>
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </button>
+          
           <button 
-            onClick={() => {
-              const element = document.getElementById('contact');
-              if (element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
+            onClick={handleGetInTouch}
+            style={{
+              cursor: 'pointer',
+              border: '2px solid rgba(255, 255, 255, 0.3)',
+              padding: '1rem 2rem',
+              borderRadius: '9999px',
+              background: 'transparent',
+              color: 'white',
+              fontSize: '1rem',
+              fontWeight: '500',
+              transition: 'all 0.3s ease',
+              backdropFilter: 'blur(4px)',
             }}
-            className="bg-transparent text-white px-8 py-4 rounded-full border-2 border-white/30 hover:border-purple-400 hover:bg-white/5 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
+            className="hover:border-purple-400 hover:bg-white/5 transform hover:scale-105"
+            onMouseEnter={(e) => {
+              e.target.style.borderColor = '#a855f7';
+              e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+              e.target.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+              e.target.style.backgroundColor = 'transparent';
+              e.target.style.transform = 'scale(1)';
+            }}
           >
             Get In Touch
           </button>
@@ -154,6 +222,7 @@ const HeroSection = () => {
         <button 
           onClick={handleScrollExplore}
           className="flex flex-col items-center text-white/70 hover:text-white transition-colors duration-300 cursor-pointer group"
+          style={{ cursor: 'pointer', border: 'none', background: 'transparent' }}
         >
           <p className="mb-2 text-xs sm:text-sm group-hover:text-purple-300 transition-colors whitespace-nowrap">Scroll to explore</p>
           <div className="w-px h-8 sm:h-12 bg-white/20 relative">

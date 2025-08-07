@@ -1,48 +1,63 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { X, Calendar, Clock, User } from 'lucide-react';
 
 const BlogReadingModal = ({ post, isOpen, onClose }) => {
+  const scrollPositionRef = useRef(0);
+
   useEffect(() => {
     if (isOpen) {
-      // Store current scroll position before opening modal
-      const scrollY = window.scrollY;
+      // Store the EXACT current scroll position immediately
+      scrollPositionRef.current = window.scrollY;
+      console.log('Modal opened at scroll position:', scrollPositionRef.current);
       
-      // Prevent background scrolling completely
+      // Prevent background scrolling
       document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
+      document.body.style.top = `-${scrollPositionRef.current}px`;
       document.body.style.overflow = 'hidden';
       document.body.style.width = '100%';
-      
-      // Store the original scroll position for restoration
-      document.body.setAttribute('data-scroll-y', scrollY.toString());
+      document.body.style.left = '0';
+      document.body.style.right = '0';
       
       return () => {
-        // Get the stored scroll position
-        const storedScrollY = document.body.getAttribute('data-scroll-y');
-        const originalScrollY = storedScrollY ? parseInt(storedScrollY) : 0;
-        
-        // Restore background scrolling
+        // Restore body styles first
         document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.overflow = '';
         document.body.style.width = '';
-        document.body.removeAttribute('data-scroll-y');
+        document.body.style.left = '';
+        document.body.style.right = '';
         
-        // Restore to the exact position where modal was opened
-        window.scrollTo(0, originalScrollY);
+        // Use requestAnimationFrame to ensure proper timing
+        requestAnimationFrame(() => {
+          console.log('Restoring scroll to position:', scrollPositionRef.current);
+          window.scrollTo({
+            top: scrollPositionRef.current,
+            left: 0,
+            behavior: 'instant'
+          });
+        });
       };
     }
   }, [isOpen]);
 
   if (!isOpen || !post) return null;
 
+  const handleClose = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+    >
       {/* Backdrop - Fixed background */}
       <div 
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-        onClick={onClose}
-        style={{ position: 'fixed' }}
+        onClick={handleClose}
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, cursor: 'pointer' }}
       />
       
       {/* Modal - Proper positioning */}
@@ -60,10 +75,29 @@ const BlogReadingModal = ({ post, isOpen, onClose }) => {
           </div>
           
           <button
-            onClick={onClose}
-            className="w-10 h-10 bg-secondary hover:bg-secondary/80 rounded-full flex items-center justify-center transition-colors"
+            onClick={handleClose}
+            style={{
+              cursor: 'pointer',
+              border: 'none',
+              padding: '0.5rem',
+              borderRadius: '50%',
+              background: 'rgba(255, 255, 255, 0.1)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '40px',
+              height: '40px',
+              transition: 'background-color 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            }}
           >
-            <X className="w-5 h-5 text-foreground" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
