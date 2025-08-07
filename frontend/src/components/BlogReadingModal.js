@@ -43,25 +43,39 @@ const BlogReadingModal = ({ post, isOpen, onClose }) => {
   if (!isOpen || !post) return null;
 
   const handleClose = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log('Modal close triggered');
     onClose();
+  };
+
+  const handleBackdropClick = (e) => {
+    // Only close if clicking exactly on the backdrop, not its children
+    if (e.target === e.currentTarget) {
+      console.log('Backdrop clicked, closing modal');
+      handleClose(e);
+    }
   };
 
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+      onClick={handleBackdropClick}
     >
-      {/* Backdrop - Fixed background */}
+      {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/80 backdrop-blur-sm"
-        onClick={handleClose}
-        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, cursor: 'pointer' }}
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
       />
       
-      {/* Modal - Proper positioning */}
-      <div className="relative bg-card border border-border rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl z-10">
+      {/* Modal - Prevent click propagation */}
+      <div 
+        className="relative bg-card border border-border rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl z-10"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="sticky top-0 bg-card/90 backdrop-blur-sm border-b border-border p-6 flex items-center justify-between z-20">
           <div className="flex items-center gap-4">
@@ -75,6 +89,7 @@ const BlogReadingModal = ({ post, isOpen, onClose }) => {
           </div>
           
           <button
+            type="button"
             onClick={handleClose}
             style={{
               cursor: 'pointer',

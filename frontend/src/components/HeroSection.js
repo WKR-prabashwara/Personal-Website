@@ -39,36 +39,66 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Enhanced scroll functions with debugging and fallback
-  const handleExploreWork = () => {
-    console.log('Explore button clicked'); // Debug log
+  // Enhanced scroll functions with multiple fallback methods
+  const handleExploreWork = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('Explore button clicked');
     const element = document.getElementById('about');
     if (element) {
-      console.log('About element found, scrolling...'); // Debug log
+      console.log('About element found, scrolling...');
+      
+      // Method 1: scrollIntoView with smooth behavior
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       
-      // Fallback scroll method if smooth scroll fails
+      // Fallback method if smooth scroll doesn't work
       setTimeout(() => {
-        element.scrollIntoView({ behavior: 'auto', block: 'start' });
+        const rect = element.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const targetPosition = rect.top + scrollTop;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+        
+        console.log('Fallback scroll executed to position:', targetPosition);
       }, 100);
+      
     } else {
-      console.error('About element not found'); // Debug log
+      console.error('About element not found');
     }
   };
 
-  const handleGetInTouch = () => {
-    console.log('Get in touch button clicked'); // Debug log
+  const handleGetInTouch = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('Get in touch button clicked');
     const element = document.getElementById('contact');
     if (element) {
-      console.log('Contact element found, scrolling...'); // Debug log
+      console.log('Contact element found, scrolling...');
+      
+      // Method 1: scrollIntoView with smooth behavior
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       
-      // Fallback scroll method if smooth scroll fails
+      // Fallback method with calculated position
       setTimeout(() => {
-        element.scrollIntoView({ behavior: 'auto', block: 'start' });
+        const rect = element.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const targetPosition = rect.top + scrollTop;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+        
+        console.log('Fallback scroll executed to contact position:', targetPosition);
       }, 100);
+      
     } else {
-      console.error('Contact element not found'); // Debug log
+      console.error('Contact element not found');
     }
   };
 
@@ -144,12 +174,13 @@ const HeroSection = () => {
           Exploring the cosmos through science, mathematics, and imagination
         </motion.p>
 
-        {/* Action Buttons - Enhanced with inline styles for guaranteed functionality */}
+        {/* Action Buttons - Enhanced with proper event handling */}
         <motion.div 
           variants={slideInFromLeft(1)}
           className="flex flex-col sm:flex-row gap-4"
         >
           <button 
+            type="button"
             onClick={handleExploreWork}
             style={{
               cursor: 'pointer',
@@ -184,6 +215,7 @@ const HeroSection = () => {
           </button>
           
           <button 
+            type="button"
             onClick={handleGetInTouch}
             style={{
               cursor: 'pointer',
